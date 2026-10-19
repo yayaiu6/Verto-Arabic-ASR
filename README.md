@@ -27,6 +27,33 @@ npm start
 
 Open http://127.0.0.1:4180. All runtime libraries are served from the application origin. `public/config.json` specifies the model repo and an immutable 40-character Hub revision. The published model release is pinned in this configuration; downloaded assets are checked against its manifest before use.
 
+## JavaScript quickstart
+
+Clone the application and serve its static build. Node.js 22 or later is required.
+
+```sh
+git clone https://github.com/yayaiu6/Verto-Arabic-ASR.git
+cd Verto-Arabic-ASR
+npm ci
+npm run build
+npm start
+```
+
+Open http://127.0.0.1:4180/web/developer.html for a complete file-to-text example.
+The browser client uses the same preprocessing, tokenizer, verified model cache and Worker as the application:
+
+```javascript
+import { VertoASR } from './web/verto.mjs';
+
+const asr = new VertoASR({ onProgress: console.log });
+await asr.load({ device: 'wasm' });
+const result = await asr.transcribe(fileInput.files[0]);
+console.log(result.text);
+asr.close();
+```
+
+Run this in a browser module served from the built application origin. Copying the module alone is insufficient: keep /config.json, /web/, /runtime/ and /ffmpeg/ at their build paths. No CDN imports or access token are needed. Use HTTPS outside localhost. Raw PCM requires the original format, sampleRate and channels via the pcm option. WebGPU is optional; use device: 'webgpu' to request it, with CPU fallback. Call close() when finished. Calls on one client must be sequential.
+
 ## Model cache and offline behavior
 
 Files are downloaded with byte progress and SHA-256/size checks, then saved in Cache Storage. Reopening reuses verified cached files. Updates keep the previous revision until the new bundle is complete. A storage failure allows memory-only inference. The settings panel can clear saved model files. Browsers can evict storage even after a persistence request.

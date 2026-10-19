@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>Verto JavaScript example</title>
+<h1>Transcribe an audio file</h1>
+<p>Choose a 0.5–30 second recording. Audio stays in this browser.</p>
+<input id="audio" type="file" accept="audio/*"><button id="run">Transcribe</button>
+<p id="status" role="status"></p><textarea id="text" rows="8" cols="60" dir="auto" aria-label="Transcript"></textarea>
+<script type="module">
+import {VertoASR} from './verto.mjs';
+const status = document.querySelector('#status');
+const asr = new VertoASR({onProgress: () => {status.textContent = 'Downloading model…';}});
+let loaded = false;
+document.querySelector('#run').onclick = async () => {
+  const file = document.querySelector('#audio').files[0];
+  if (!file) {status.textContent = 'Choose an audio file first.'; return;}
+  const button = document.querySelector('#run'); button.disabled = true;
+  try {
+    if (!loaded) {status.textContent = 'Loading model…'; await asr.load(); loaded = true;}
+    status.textContent = 'Transcribing…';
+    const result = await asr.transcribe(file);
+    document.querySelector('#text').value = result.text;
+    status.textContent = 'Done';
+  } catch (error) {status.textContent = error.message;}
+  finally {button.disabled = false;}
+};
+addEventListener('pagehide', () => asr.close());
+</script></html>
