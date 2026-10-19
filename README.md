@@ -25,7 +25,7 @@ npm run build
 npm start
 ```
 
-Open http://127.0.0.1:4180. All runtime libraries are served from the application origin. `public/config.json` specifies the model repo and an immutable 40-character Hub revision. Until the first model release has been uploaded and pinned, model loading will report an unavailable manifest; the UI/build remain testable.
+Open http://127.0.0.1:4180. All runtime libraries are served from the application origin. `public/config.json` specifies the model repo and an immutable 40-character Hub revision. The published model release is pinned in this configuration; downloaded assets are checked against its manifest before use.
 
 ## Model cache and offline behavior
 

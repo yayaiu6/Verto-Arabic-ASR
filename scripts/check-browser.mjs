@@ -10,7 +10,7 @@ const browser=await chromium.launch({channel:'chrome',headless:true});
 const context=await browser.newContext({locale:'en-US'});
 const page=await context.newPage(),errors=[],requests=[];
 page.on('pageerror',e=>errors.push(String(e)));page.on('request',r=>requests.push(r.url()));
-await context.route('https://huggingface.co/**',async route=>{
+if(!process.env.TEST_LIVE_HF)await context.route('https://huggingface.co/**',async route=>{
  const name=new URL(route.request().url()).pathname.split('/').at(-1);
  const bytes=await fs.readFile(path.join(bundle,name));
  await route.fulfill({status:200,body:bytes,headers:{'access-control-allow-origin':'*','cross-origin-resource-policy':'cross-origin','content-type':'application/octet-stream'}});
