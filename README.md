@@ -1,12 +1,12 @@
-# Verto Arabic ASR · Preview
+# Verto Arabic ASR
 
-On-device Egyptian Arabic and Arabic–English code-switching speech recognition. Browser application and INT8 distribution by **Yahya Mahroof**, based on **Metro-ASR Small by Mohammed Aly**.
+Transcribe Egyptian Arabic and mixed Arabic-English audio in your browser. Record or upload a clip; audio processing stays on your device. Preview release: clips from 0.5 to 30 seconds.
 
-[Model](https://huggingface.co/yayaiu6/Verto-Arabic-ASR) · [Arabic](README.ar.md) · [Upstream](https://github.com/MohammedAly22/metro-asr)
+[Try it](https://verto-arabic-asr.yahya-mahroof.site/web/index.html) | [Model files](https://huggingface.co/yayaiu6/Verto-Arabic-ASR) | [Arabic](README.ar.md)
 
-## What is public
+## Features
 
-This repository contains the browser runtime, UI, audio decoder integration, packaging and tests. Quantization/export tooling is private and is **not** included. Model files live on Hugging Face, not in this repository or Docker image. This is a conversion of existing weights, not a newly trained model.
+The application includes recording, file decoding, transcription and model caching. Model files download from Hugging Face on first use and are stored separately from the application.
 
 - ONNX model: **69,461,736 bytes** (69.46 decimal MB).
 - Model + tokenizer + audio configuration: **69,934,740 bytes** (69.93 MB).
@@ -42,7 +42,7 @@ docker run --rm -p 8080:8080 -e PORT=8080 verto-asr:preview
 
 Nginx runs as a non-root user. `/health` returns `ok`. PORT must be 1024–65535; override with `-e PORT=9090 -p 9090:9090`. Optional `MODEL_REPO` and `MODEL_REVISION` select another immutable compatible bundle; custom repositories require a revision. Never pass a Hub token to browser config.
 
-Railway: connect this GitHub repository, use Dockerfile, health path `/health`, and generate a service domain when ready. VPS: run the container behind an HTTPS reverse proxy and route your domain to it. Preserve COOP/COEP headers. HTTPS is required for microphone access outside localhost. No deployment is automatically created by this release.
+Railway: connect this GitHub repository, use Dockerfile, health path `/health`, and generate a service domain when ready. VPS: run the container behind an HTTPS reverse proxy and route your domain to it. Preserve COOP/COEP headers. HTTPS is required for microphone access outside localhost. Use the public HTTPS URL without a port. Railway target port must match PORT (8080 by default).
 
 ## Preview evidence and limits
 
@@ -54,4 +54,4 @@ FP32 export matched original numerical tolerance (atol 1e-4, rtol 1e-3) and tran
 
 ## Licenses
 
-Our application source is MIT. Retain original Metro copyright/license for derivative code and model distributions. ONNX Runtime and the FFmpeg wrapper have their own MIT notices. **The optional FFmpeg core is GPL-2.0-or-later, not MIT**; see [third-party notices](THIRD_PARTY_NOTICES.md) and [source material](licenses/FFMPEG-SOURCE.md). Downstream distributors must satisfy applicable dependency obligations separately. No private conversion tools are required to use the published model.
+Application source: MIT. The model is an INT8 conversion of [Metro-ASR Small by Mohammed Aly](https://huggingface.co/mohammedaly22/Metro-ASR-Small). The original MIT notice is preserved in licenses/METRO-MIT.txt. ONNX Runtime and the FFmpeg wrapper have their own MIT notices. **The optional FFmpeg core is GPL-2.0-or-later, not MIT**; see [third-party notices](THIRD_PARTY_NOTICES.md) and [source material](licenses/FFMPEG-SOURCE.md). Downstream distributors must satisfy applicable dependency obligations separately.
