@@ -5,9 +5,10 @@ const vertoASR = (model: ModelData) =>
 // Run in a browser module on the application's origin.
 import { VertoASR } from './web/verto.mjs';
 
-const asr = await VertoASR.fromPretrained('${model.id}', {
-  revision: '71640c9359520f39999079a92f0b97a6651f06c4',
-});
+const response = await fetch('https://huggingface.co/api/models/${model.id}');
+if (!response.ok) throw new Error('Model metadata unavailable');
+const { sha: revision } = await response.json();
+const asr = await VertoASR.fromPretrained('${model.id}', { revision });
 try {
   const result = await asr.transcribe(fileInput.files[0]);
   console.log(result.text);
