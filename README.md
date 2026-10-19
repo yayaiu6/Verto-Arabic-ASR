@@ -1,1 +1,57 @@
-# Verto-Arabic-ASR
+# Verto Arabic ASR · Preview
+
+On-device Egyptian Arabic and Arabic–English code-switching speech recognition. Browser application and INT8 distribution by **Yahya Mahroof**, based on **Metro-ASR Small by Mohammed Aly**.
+
+[Model](https://huggingface.co/yayaiu6/Verto-Arabic-ASR) · [Arabic](README.ar.md) · [Upstream](https://github.com/MohammedAly22/metro-asr)
+
+## What is public
+
+This repository contains the browser runtime, UI, audio decoder integration, packaging and tests. Quantization/export tooling is private and is **not** included. Model files live on Hugging Face, not in this repository or Docker image. This is a conversion of existing weights, not a newly trained model.
+
+- ONNX model: **69,461,736 bytes** (69.46 decimal MB).
+- Model + tokenizer + audio configuration: **69,934,740 bytes** (69.93 MB).
+- Four-thread CPU/WASM by default when cross-origin isolation is available; one-thread fallback otherwise. Optional WebGPU can use mixed CPU placement.
+- Upload audio or WhatsApp-style OGG/Opus, or record up to 30 seconds. PCM/raw input requires original sample rate/channel/sample format. Browser codecs are attempted first; FFmpeg/WASM (~32 MB) loads only on fallback.
+- Arabic/English UI, editable/copyable transcript, local preview. No audio/text upload, analytics, or inference backend.
+
+## Run
+
+Node 22+:
+
+```sh
+npm ci
+npm test
+npm run build
+npm start
+```
+
+Open http://127.0.0.1:4180. All runtime libraries are served from the application origin. `public/config.json` specifies the model repo and an immutable 40-character Hub revision. Until the first model release has been uploaded and pinned, model loading will report an unavailable manifest; the UI/build remain testable.
+
+## Model cache and offline behavior
+
+Files are downloaded with byte progress and SHA-256/size checks, then saved in Cache Storage. Reopening reuses verified cached files. Updates keep the previous revision until the new bundle is complete. A storage failure allows memory-only inference. The settings panel can clear saved model files. Browsers can evict storage even after a persistence request.
+
+The service worker caches the app shell and libraries actually loaded. Offline inference requires a previous complete online load on the same browser/origin, including any optional audio converter you need. New origin, incognito sessions, cleared site data or missing optional assets require downloading again. Audio recordings and transcripts are never stored in caches.
+
+## Docker / Railway / VPS
+
+```sh
+docker build -t verto-asr:preview .
+docker run --rm -p 8080:8080 -e PORT=8080 verto-asr:preview
+```
+
+Nginx runs as a non-root user. `/health` returns `ok`. PORT must be 1024–65535; override with `-e PORT=9090 -p 9090:9090`. Optional `MODEL_REPO` and `MODEL_REVISION` select another immutable compatible bundle; custom repositories require a revision. Never pass a Hub token to browser config.
+
+Railway: connect this GitHub repository, use Dockerfile, health path `/health`, and generate a service domain when ready. VPS: run the container behind an HTTPS reverse proxy and route your domain to it. Preserve COOP/COEP headers. HTTPS is required for microphone access outside localhost. No deployment is automatically created by this release.
+
+## Preview evidence and limits
+
+Original checkpoint 739,546,518 bytes includes optimizer state; original FP32 parameter payload 246,345,280 bytes. Exported FP32 ONNX was 247,462,020 bytes. The stored INT8 weights retain FP32 activations, so download reduction is not an all-integer-compute or RAM-reduction claim.
+
+On Intel Core i7-10850H, Chrome headless, 4 WASM threads, 10 seconds of speech: median inference+CTC 810.51 ms plus 56.93 ms feature extraction (RTF 0.08674); WebGPU-requested mixed path 96.73 + 55.46 ms. One warm-up and five measured runs; audio decode/resample and initial loading excluded. These historical probe measurements are not universal performance guarantees.
+
+FP32 export matched original numerical tolerance (atol 1e-4, rtol 1e-3) and transcripts across 12 demo files; browser INT8 matched native INT8 on those files. Only 7/12 INT8 transcripts matched FP32 exactly. Some demo files were duplicates. **WER/CER comparison against human references remains pending; preservation of accuracy is not claimed. Peak RAM/VRAM is unmeasured.** Egyptian dialect is the target; general Arabic/dialect coverage is not guaranteed. 0.5–30-second clips only; no long-audio chunking or KenLM. This build does not redistribute upstream audio examples; provide your own audio or use the microphone.
+
+## Licenses
+
+Our application source is MIT. Retain original Metro copyright/license for derivative code and model distributions. ONNX Runtime and the FFmpeg wrapper have their own MIT notices. **The optional FFmpeg core is GPL-2.0-or-later, not MIT**; see [third-party notices](THIRD_PARTY_NOTICES.md) and [source material](licenses/FFMPEG-SOURCE.md). Downstream distributors must satisfy applicable dependency obligations separately. No private conversion tools are required to use the published model.

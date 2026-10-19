@@ -1,0 +1,22 @@
+name: Browser package and container
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run audit:release
+      - run: docker build -t verto:ci .
+      - run: |
+          docker run -d --name verto-test -e PORT=9090 -p 9090:9090 verto:ci
+          for i in $(seq 1 15); do curl -fsS http://localhost:9090/health && break || sleep 2; done
+          curl -fsS http://localhost:9090/health
+          curl -fsSI http://localhost:9090/web/index.html | grep -i 'Cross-Origin-Opener-Policy: same-origin'
+          curl -fsSI http://localhost:9090/web/index.html | grep -i 'Cross-Origin-Embedder-Policy: require-corp'
+          test "$(docker exec verto-test id -u)" != 0

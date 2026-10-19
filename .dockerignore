@@ -1,0 +1,16 @@
+**
+!package.json
+!package-lock.json
+!LICENSE
+!THIRD_PARTY_NOTICES.md
+!web/
+!web/**
+!public/
+!public/**
+!licenses/
+!licenses/**
+!scripts/
+!scripts/build.mjs
+!scripts/dependency-sources.mjs
+!deploy/
+!deploy/**

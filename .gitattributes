@@ -1,0 +1,7 @@
+* text=auto
+*.sh text eol=lf
+Dockerfile text eol=lf
+*.mjs text eol=lf
+*.js text eol=lf
+*.conf.template text eol=lf
+*.tar.gz binary
