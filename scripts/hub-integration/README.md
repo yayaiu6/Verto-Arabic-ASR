@@ -1,6 +1,6 @@
 # Hub library integration
 
-These are proposed additions for `huggingface/huggingface.js`, not an installed integration.
+Registration was submitted in [huggingface/huggingface.js#2688](https://github.com/huggingface/huggingface.js/pull/2688). The upstream PR contains the adapted registry entry, exported snippet and tests; the files here are initial proposal references, not an installed integration.
 The Hub maintainers must review and accept a library integration before its generated usage menu is available.
 
 1. The model card declares `library_name: verto-asr`.

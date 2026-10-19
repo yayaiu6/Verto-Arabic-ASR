@@ -84,7 +84,7 @@ python -c "from huggingface_hub import HfApi; HfApi().upload_folder(repo_id='yay
 
 The destination must be a new directory. Create the destination Space with the static SDK before uploading. Upload only the package contents. Model files remain on the model repository. Third-party source archives accompany the runtime; user audio is not included.
 
-The proposed Hub library registration and snippet are in [scripts/hub-integration](scripts/hub-integration). They have not been submitted or accepted; a provider deployment integration is separate.
+The proposed Hub library registration and snippet are in [scripts/hub-integration](scripts/hub-integration). Registration has been submitted in [huggingface/huggingface.js#2688](https://github.com/huggingface/huggingface.js/pull/2688) and is awaiting review. A provider deployment integration is separate.
 
 ## Model cache and offline behavior
 
