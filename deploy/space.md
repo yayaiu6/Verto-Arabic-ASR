@@ -4,7 +4,7 @@ emoji: "🎙️"
 colorFrom: blue
 colorTo: indigo
 sdk: static
-app_file: web/index.html
+app_file: index.html
 models:
 - yayaiu6/Verto-Arabic-ASR
 license: mit
@@ -20,7 +20,7 @@ custom_headers:
 Record or upload 0.5-30 seconds of Egyptian Arabic or mixed Arabic-English speech. Audio processing runs on your device.
 
 Open the standalone app for microphone recording and the best browser compatibility:
-https://yayaiu6-verto-arabic-asr.hf.space/web/index.html
+https://yayaiu6-verto-arabic-asr.static.hf.space/
 
 [Application and setup](https://github.com/yayaiu6/Verto-Arabic-ASR) | [Model](https://huggingface.co/yayaiu6/Verto-Arabic-ASR)
 

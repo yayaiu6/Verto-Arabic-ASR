@@ -27,6 +27,8 @@ npm start
 
 Open http://127.0.0.1:4180. All runtime libraries are served from the application origin. `public/config.json` specifies the model repo and an immutable 40-character Hub revision. The published model release is pinned in this configuration; downloaded assets are checked against its manifest before use.
 
+[Hugging Face demo](https://huggingface.co/spaces/yayaiu6/Verto-Arabic-ASR) | [Open browser app](https://yayaiu6-verto-arabic-asr.static.hf.space/)
+
 ## JavaScript quickstart
 
 Clone the application and serve its static build. Node.js 22 or later is required.

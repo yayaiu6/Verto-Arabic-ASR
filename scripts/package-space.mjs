@@ -11,5 +11,9 @@ if (output === process.cwd() || output.startsWith(process.cwd() + path.sep)) {
 await fs.mkdir(output);
 await fs.access('dist/web/index.html');
 await fs.cp('dist', output, {recursive: true});
+const html = (await fs.readFile('dist/web/index.html', 'utf8'))
+  .replace('href="./style.css"', 'href="/web/style.css"')
+  .replace('src="./app.mjs"', 'src="/web/app.mjs"');
+await fs.writeFile(path.join(output, 'index.html'), html);
 await fs.copyFile('deploy/space.md', path.join(output, 'README.md'));
 console.log('Static Space package:', output);

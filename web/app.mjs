@@ -18,7 +18,7 @@ function clearResult(){
   $('text').value='';$('copy').disabled=true;$('metrics').textContent='';
   $('result-summary').textContent='النص هيظهر هنا بعد تفريغ الصوت الجديد.';
 }
-function attachWorker(){worker=new Worker('./worker.mjs',{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
+function attachWorker(){worker=new Worker(new URL('./worker.mjs',import.meta.url),{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
 function setAudio(pcm,name){
   validateSamples(pcm);samples=pcm;
   $('selected').hidden=false;$('filename').textContent=name;$('duration').textContent=`${(pcm.length/16000).toFixed(1)} ثانية`;
