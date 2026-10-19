@@ -54,6 +54,36 @@ asr.close();
 
 Run this in a browser module served from the built application origin. Copying the module alone is insufficient: keep /config.json, /web/, /runtime/ and /ffmpeg/ at their build paths. No CDN imports or access token are needed. Use HTTPS outside localhost. Raw PCM requires the original format, sampleRate and channels via the pcm option. WebGPU is optional; use device: 'webgpu' to request it, with CPU fallback. Call close() when finished. Calls on one client must be sequential.
 
+### Load a specific Hub model revision
+
+```javascript
+const asr = await VertoASR.fromPretrained('yayaiu6/Verto-Arabic-ASR', {
+  revision: '71640c9359520f39999079a92f0b97a6651f06c4',
+  device: 'wasm',
+});
+try {
+  console.log((await asr.transcribe(fileInput.files[0])).text);
+} finally {
+  asr.close();
+}
+```
+
+### Hugging Face Space
+
+A static Space serves the same browser application. To prepare an upload without a paid build service:
+
+```sh
+npm run build
+node scripts/package-space.mjs ../verto-space-upload
+python -m pip install huggingface_hub
+hf auth login
+python -c "from huggingface_hub import HfApi; HfApi().upload_folder(repo_id='yayaiu6/Verto-Arabic-ASR', repo_type='space', folder_path='../verto-space-upload', commit_message='Update browser demo')"
+```
+
+The destination must be a new directory. Create the destination Space with the static SDK before uploading. Upload only the package contents. Model files remain on the model repository. Third-party source archives accompany the runtime; user audio is not included.
+
+The proposed Hub library registration and snippet are in [scripts/hub-integration](scripts/hub-integration). They have not been submitted or accepted; a provider deployment integration is separate.
+
 ## Model cache and offline behavior
 
 Files are downloaded with byte progress and SHA-256/size checks, then saved in Cache Storage. Reopening reuses verified cached files. Updates keep the previous revision until the new bundle is complete. A storage failure allows memory-only inference. The settings panel can clear saved model files. Browsers can evict storage even after a persistence request.

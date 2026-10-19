@@ -1,7 +1,14 @@
 import {readAudio} from './audio.mjs';
+import {validateConfig} from './model-cache.mjs';
 
 /** Browser client. Serve this module and the runtime assets from the same origin. */
 export class VertoASR {
+  static async fromPretrained(repo, {revision, device = 'wasm', onProgress} = {}) {
+    const config = validateConfig({repo, revision, manifest: 'manifest.json'});
+    const client = new VertoASR({onProgress});
+    try {await client.load({device, config}); return client;}
+    catch (error) {client.close(); throw error;}
+  }
   constructor({onProgress = () => {}} = {}) {
     this.worker = new Worker(new URL('./worker.mjs', import.meta.url), {type: 'module'});
     this.pending = null;
@@ -26,9 +33,10 @@ export class VertoASR {
       try { this.worker.postMessage(data); } catch (error) { this.finish(error); }
     });
   }
-  load({device = 'wasm'} = {}) {
+  load({device = 'wasm', config} = {}) {
     if (!['wasm', 'webgpu'].includes(device)) return Promise.reject(new Error('Use wasm or webgpu'));
-    return this.request({type: 'load', mode: device});
+    if (config) validateConfig(config);
+    return this.request({type: 'load', mode: device, config});
   }
   async transcribe(file, {pcm} = {}) {
     const audio = await readAudio(file, {pcm});

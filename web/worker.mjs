@@ -11,10 +11,10 @@ async function createCpu() {
   session=await ort.InferenceSession.create(modelBytes,{executionProviders:['wasm'],graphOptimizationLevel:'all'});
   provider='wasm';
 }
-async function load(mode) {
+async function load(mode, modelConfig) {
   await session?.release(); session=null; fallbackReason=null;
   const start=performance.now();
-  const config=await (await fetch('/config.json',{cache:'no-cache'})).json();
+  const config=modelConfig || await (await fetch('/config.json',{cache:'no-cache'})).json();
   const bundle=await loadModelFiles(config,event=>post('progress',event));
   modelBytes=bundle.files['metro.int8.onnx'];
   filters=JSON.parse(new TextDecoder().decode(bundle.files['mel_filters.json']));
@@ -71,7 +71,7 @@ self.onmessage=async ({data})=>{
   if(busy) { post('error',{id:data.id,error:'Worker is busy'}); return; }
   busy=true;
   try {
-    if(data.type==='load') await load(data.mode);
+    if(data.type==='load') await load(data.mode,data.config);
     else if(data.type==='clear-cache'){await clearModels();post('cache-cleared');}
     else if(data.type==='transcribe') post('result',{id:data.id,...await infer(data.samples,data.repeats)});
     else throw new Error('Unknown worker operation');
