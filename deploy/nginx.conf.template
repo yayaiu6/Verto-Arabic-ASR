@@ -11,6 +11,8 @@ http {
  scgi_temp_path /tmp/scgi_temp;
  server {
   listen ${PORT};
+  # TLS terminates at the hosting proxy; never expose its internal port/scheme.
+  absolute_redirect off;
   root /usr/share/nginx/html;
   add_header Cross-Origin-Opener-Policy same-origin always;
   add_header Cross-Origin-Embedder-Policy require-corp always;

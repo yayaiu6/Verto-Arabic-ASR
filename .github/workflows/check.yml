@@ -17,6 +17,7 @@ jobs:
           docker run -d --name verto-test -e PORT=9090 -p 9090:9090 verto:ci
           for i in $(seq 1 15); do curl -fsS http://localhost:9090/health && break || sleep 2; done
           curl -fsS http://localhost:9090/health
+          curl -fsSI -H 'Host: demo.example' -H 'X-Forwarded-Proto: https' http://localhost:9090/ | tr -d '\r' | grep -Fx 'Location: /web/index.html'
           curl -fsSI http://localhost:9090/web/index.html | grep -i 'Cross-Origin-Opener-Policy: same-origin'
           curl -fsSI http://localhost:9090/web/index.html | grep -i 'Cross-Origin-Embedder-Policy: require-corp'
           test "$(docker exec verto-test id -u)" != 0
