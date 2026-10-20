@@ -6,7 +6,7 @@
 <input id="audio" type="file" accept="audio/*"><button id="run">Transcribe</button>
 <p id="status" role="status"></p><textarea id="text" rows="8" cols="60" dir="auto" aria-label="Transcript"></textarea>
 <script type="module">
-import {VertoASR} from './verto.mjs?v=8d65b25983ce9d15d7c7';
+import {VertoASR} from './verto.mjs?v=7c6e079d3c5326387ddd';
 const status = document.querySelector('#status');
 const asr = new VertoASR({onProgress: () => {status.textContent = 'Downloading model…';}});
 let loaded = false;

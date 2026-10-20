@@ -86,7 +86,7 @@ export async function readAudio(file,{pcm,onStatus=()=>{}}={}) {
   try{const context=new OfflineAudioContext(1,1,16000);decoded=await context.decodeAudioData(bytes.slice(0));}
   catch{
     onStatus('المتصفح مش بيفك الصيغة دي مباشرة. بنجهز التحويل المحلي…');
-    const {convertAudio}=await import('./convert-audio.mjs?v=8d65b25983ce9d15d7c7');
+    const {convertAudio}=await import('./convert-audio.mjs?v=7c6e079d3c5326387ddd');
     return convertAudio(bytes,onStatus);
   }
   if(decoded.duration<.5 || decoded.duration>30) throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 30 ثانية');
@@ -99,17 +99,44 @@ export async function recordMicrophone(onLevel) {
   const stream=await navigator.mediaDevices.getUserMedia({audio:{channelCount:1,echoCancellation:true,noiseSuppression:true}});
   let context;
   try {
-    context=new AudioContext({sampleRate:16000});await context.audioWorklet.addModule('/assets/app/capture-worklet.mjs?v=8d65b25983ce9d15d7c7');
+    // Capture at the device's preferred rate; resample once after recording.
+    context=new AudioContext({latencyHint:'playback'});await context.audioWorklet.addModule('/assets/app/capture-worklet.mjs?v=7c6e079d3c5326387ddd');
     const chunks=[],source=context.createMediaStreamSource(stream),node=new AudioWorkletNode(context,'pcm-capture');
-    node.port.onmessage=({data})=>{chunks.push(data);let sum=0;for(const x of data)sum+=x*x;onLevel?.(Math.min(1,Math.sqrt(sum/data.length)*5));};
-    source.connect(node);node.connect(context.destination);await context.resume();let stopped=false;
-    return {async stop(){
+    let stopped=false,interrupted=false,captureError=null,finishCapture=null,chunkCount=0,diagnostics=null;
+    node.port.onmessage=({data})=>{
+      if(data.type==='stopped'){finishCapture?.(data);return;}
+      if(data.type!=='chunk')return;
+      const samples=data.samples;chunks.push(samples);chunkCount++;
+      let sum=0;for(const x of samples)sum+=x*x;
+      onLevel?.(Math.min(1,Math.sqrt(sum/samples.length)*5));
+    };
+    node.onprocessorerror=()=>{captureError=new Error('تعذر تسجيل الصوت بشكل سليم. أعد التسجيل.');};
+    source.connect(node);node.connect(context.destination);await context.resume();
+    if(context.state!=='running')throw new Error('تعذر بدء تسجيل الصوت. أعد المحاولة.');
+    context.onstatechange=()=>{if(!stopped&&context.state!=='running')interrupted=true;};
+    for(const track of stream.getTracks())track.onended=()=>{if(!stopped)interrupted=true;};
+    return {get diagnostics(){return diagnostics;},async stop(){
       if(stopped) throw new Error('Recording already stopped');stopped=true;
-      stream.getTracks().forEach(track=>track.stop());source.disconnect();node.disconnect();
-      const rate=context.sampleRate;await context.close();
-      const samples=new Float32Array(chunks.reduce((n,c)=>n+c.length,0));let at=0;
-      for(const chunk of chunks){samples.set(chunk,at);at+=chunk.length;}
-      return (await resample(samples,rate)).slice(0,480000);
+      source.disconnect();stream.getTracks().forEach(track=>track.stop());
+      let timeout;
+      try{
+        if(interrupted||captureError)throw captureError||new Error('التسجيل اتقطع أثناء التقاط الصوت. خلي الصفحة مفتوحة وأعد التسجيل.');
+        const ended=await new Promise((resolve,reject)=>{
+          finishCapture=resolve;
+          timeout=setTimeout(()=>reject(new Error('تعذر استلام التسجيل كاملًا. أعد التسجيل.')),2500);
+          node.port.postMessage({type:'stop'});
+        });
+        const count=chunks.reduce((n,c)=>n+c.length,0),rate=context.sampleRate;
+        if(captureError||count!==ended.frames||rate!==ended.sampleRate)throw captureError||new Error('التسجيل غير مكتمل. أعد التسجيل.');
+        if(count/rate<.5)throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 30 ثانية');
+        const samples=new Float32Array(count);let at=0;
+        for(const chunk of chunks){samples.set(chunk,at);at+=chunk.length;}
+        diagnostics={sampleRate:rate,capturedFrames:count,chunks:chunkCount,seconds:count/rate,outputSampleRate:16000};
+        return (await resample(samples,rate)).slice(0,480000);
+      }finally{
+        clearTimeout(timeout);finishCapture=null;node.port.onmessage=null;node.onprocessorerror=null;
+        context.onstatechange=null;node.disconnect();await context.close();
+      }
     }};
   } catch(e){stream.getTracks().forEach(t=>t.stop());await context?.close();throw e;}
 }

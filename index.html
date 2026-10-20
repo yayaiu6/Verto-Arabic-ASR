@@ -743,16 +743,17 @@ body.model-loading { overflow: hidden; }
 <details class="settings"><summary>إعدادات التشغيل والتفاصيل التقنية</summary><div class="settings-row"><label>محرك التشغيل <select id="mode"><option value="wasm">CPU — الافتراضي</option><option value="webgpu">تجربة WebGPU مع رجوع تلقائي إلى CPU</option></select></label><button id="load" class="subtle">إعادة تحميل الموديل</button><label><input id="benchmark" type="checkbox"> قياس الأداء: إحماء + 5 محاولات</label></div><button id="clear-cache" class="subtle" type="button">مسح الموديل المحفوظ</button><pre id="device"></pre><pre id="metrics"></pre></details>
 <footer>Verto Arabic ASR · Preview · INT8 · مقاطع من 0.5 إلى 30 ثانية<br>التسجيل والتحويل محليان. الدقة قد تختلف حسب وضوح الصوت واللهجة.<br><a href="https://github.com/yayaiu6/Verto-Arabic-ASR">GitHub</a> · <a href="https://huggingface.co/yayaiu6/Verto-Arabic-ASR">Model</a> · <a href="/assets/licenses/NOTICES.md">Licenses</a></footer>
 </main><script type="module">
-import {readAudio,audioError,recordMicrophone,encodeWav} from '/assets/app/audio.mjs?v=8d65b25983ce9d15d7c7';
-import {validateSamples} from '/assets/app/core.mjs?v=8d65b25983ce9d15d7c7';
-import {initLanguage} from '/assets/app/i18n.mjs?v=8d65b25983ce9d15d7c7';
-import {createExampleLoader,assertExamplesPublishable} from '/assets/app/examples.mjs?v=8d65b25983ce9d15d7c7';
+import {readAudio,audioError,recordMicrophone,encodeWav} from '/assets/app/audio.mjs?v=7c6e079d3c5326387ddd';
+import {validateSamples} from '/assets/app/core.mjs?v=7c6e079d3c5326387ddd';
+import {initLanguage} from '/assets/app/i18n.mjs?v=7c6e079d3c5326387ddd';
+import {createExampleLoader,assertExamplesPublishable} from '/assets/app/examples.mjs?v=7c6e079d3c5326387ddd';
 function formatTranscript(text){
  return text.replace(/(^|[^\p{L}\p{M}\p{N}_])ال(?=[ \t]+[A-Za-z])/gu,'$1الـ');
 }
 
 const $=id=>document.getElementById(id);
 let worker;
+let recordingInfo=null;
 let booting=true;
 let ready=false,loadedMode=null,working=false,samples=null,recorder=null,tick=null,previewUrl=null,loadTask=null;
 const loadExample=createExampleLoader();
@@ -770,8 +771,9 @@ function clearResult(){
   $('text').value='';$('copy').disabled=true;$('metrics').textContent='';
   $('result-summary').textContent='النص هيظهر هنا بعد تفريغ الصوت الجديد.';
 }
-function attachWorker(){worker=new Worker(new URL('/assets/app/worker.mjs?v=8d65b25983ce9d15d7c7',import.meta.url),{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
+function attachWorker(){worker=new Worker(new URL('/assets/app/worker.mjs?v=7c6e079d3c5326387ddd',import.meta.url),{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
 function setAudio(pcm,name){
+  recordingInfo=null;
   validateSamples(pcm);samples=pcm;
   $('selected').hidden=false;$('filename').textContent=name;$('duration').textContent=`${(pcm.length/16000).toFixed(1)} ثانية`;
   if(previewUrl)URL.revokeObjectURL(previewUrl);
@@ -805,7 +807,7 @@ function handleMessage({data}){
   if(data.type==='fallback'){status('التشغيل على CPU','تعذر مسار GPU؛ بنكمل على المعالج.');$('device').textContent=JSON.stringify(data,null,2);return;}
   if(data.type==='result'){
     $('text').value=formatTranscript(data.text);$('copy').disabled=!data.text;
-    const {ids,text,type,...metrics}=data;$('metrics').textContent=JSON.stringify({...metrics,outputTokens:ids.length},null,2);
+    const {ids,text,type,...metrics}=data;$('metrics').textContent=JSON.stringify({...metrics,outputTokens:ids.length,...(recordingInfo?{recording:recordingInfo}:{})},null,2);
     $('result-summary').textContent=`${data.duration.toFixed(1)} ثانية صوت · ${((data.featureMs+data.medianMs)/1000).toFixed(2)} ثانية معالجة · ${data.provider==='wasm'?'CPU':'WebGPU / CPU'}`;
     working=false;$('progress').hidden=true;
     if(matchMedia('(max-width: 720px)').matches){
@@ -885,7 +887,7 @@ async function stopRecording(){
   if(!recorder)return;
   const active=recorder;recorder=null;clearInterval(tick);tick=null;working=true;controls();
   $('record').classList.remove('recording');$('record-label').textContent='تسجيل';$('record-hint').textContent='حتى 30 ثانية';$('recording-panel').hidden=true;
-  try{setAudio(await active.stop(),'تسجيل الميكروفون');working=false;await transcribe();}catch(e){finishError(e);}
+  try{setAudio(await active.stop(),'تسجيل الميكروفون');recordingInfo=active.diagnostics;working=false;await transcribe();}catch(e){finishError(e);}
 }
 $('record').onclick=async()=>{
   if(recorder){await stopRecording();return;}

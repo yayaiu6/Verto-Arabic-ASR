@@ -22,6 +22,13 @@ pairs.push(["تعذر تحميل المثال أو تشغيله. اضغط مجد
 pairs.push(...[["تنزيل الموديل: حوالي 70 MB. لا يتم رفع الصوت.","Downloading the model: about 70 MB. Audio is not uploaded."],["يمكنك تعديل النص ونسخه.","You can edit and copy the transcript."],["اختر ملف صوت أو سجّل مقطعًا أولًا.","Choose an audio file or record a clip first."],["فك الصوت وتجهيزه على الجهاز.","Decoding and preparing audio on your device."],["جاري التسجيل…","Recording…"],["اضغط إيقاف عند انتهاء التسجيل.","Press Stop when finished."],["اضغط لإيقاف التسجيل","Press to stop recording"],["تم تحديد النص","Text selected"],["تم النسخ","Copied"],["تم اختيار الملف","File selected"],["تعذر إكمال العملية","Unable to complete the operation"],["يظهر النص هنا بعد التفريغ. يمكنك تعديله ونسخه.","The transcript will appear here. You can edit and copy it."]]);
 pairs.push(...[["تجهيز نموذج التفريغ","Preparing the speech model"],["يبدأ التحميل تلقائيًا. حوالي 70 MB في المرة الأولى، ثم نستخدم النسخة المحفوظة على جهازك عند توفرها.","Download starts automatically. About 70 MB on first use; subsequent visits use the saved model when available."],["جاري التحقق من الموديل المحفوظ…","Checking the saved model…"],["الصوت يظل على جهازك.","Your audio stays on your device."],["إعادة المحاولة","Retry"],["تعذر تجهيز الموديل","Could not prepare the model"],["جاري تنزيل الموديل…","Downloading model…"],["جاري تهيئة محرك التفريغ…","Initializing the transcription engine…"],["تعذر حفظ الموديل. يعمل في هذه الجلسة، وقد تحتاج لتنزيله عند فتح الصفحة مجددًا.","The model could not be saved. It works for this session but may need to download again next time."]]);
 pairs.push(["اترك الصفحة مفتوحة حتى يكتمل التنزيل.","Keep this page open until the download finishes."]);
+pairs.push(
+ ['تعذر تسجيل الصوت بشكل سليم. أعد التسجيل.','Audio capture failed. Please record again.'],
+ ['تعذر بدء تسجيل الصوت. أعد المحاولة.','Audio recording could not start. Please try again.'],
+ ['التسجيل اتقطع أثناء التقاط الصوت. خلي الصفحة مفتوحة وأعد التسجيل.','Audio capture was interrupted. Keep this page open and record again.'],
+ ['تعذر استلام التسجيل كاملًا. أعد التسجيل.','The complete recording could not be received. Please record again.'],
+ ['التسجيل غير مكتمل. أعد التسجيل.','The recording is incomplete. Please record again.']
+);
 let lang;
 try{lang=localStorage.getItem('verto-language');}catch{}
 if(!['ar','en'].includes(lang))lang=navigator.language?.startsWith('ar')?'ar':'en';
