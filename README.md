@@ -60,7 +60,3 @@ Audio and transcripts are not uploaded or saved. Network requests download appli
 ## Credits and licenses
 
 Original model: Metro-ASR Small by Mohammed Aly. Verto's contribution is INT8 conversion and browser execution, by Yahya Mahroof. Application code retains its existing MIT [LICENSE](LICENSE). Third-party components have their own terms, including the FFmpeg binary; see [notices and sources](assets/licenses/NOTICES.md).
-
-## ملخص عربي
-
-ديمو لتفريغ المصري والعربي والإنجليزي داخل المتصفح. ارفع ملفًا أو سجّل مقطعًا من 0.5 إلى 30 ثانية؛ يمكنك تعديل النص ونسخه. التشغيل والنشر بـDocker دون Node أو npm. يحمل الموديل تلقائيًا ويحاول حفظه على الجهاز. دقة التفريغ لم تُقيّم بعد بنصوص مرجعية بشرية. الأمثلة من ملفات الديمو الأصلي، وروابط مصادرها مسجلة في بيانات الأمثلة.
