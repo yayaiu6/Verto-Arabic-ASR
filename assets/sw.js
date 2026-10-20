@@ -1,4 +1,4 @@
-const CACHE='verto-app-0d37e40b274a962a1348';
+const CACHE='verto-app-8d65b25983ce9d15d7c7';
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const response=await fetch('/assets/precache.json',{cache:'no-store'});
  if(!response.ok)throw new Error('Application cache manifest unavailable');
