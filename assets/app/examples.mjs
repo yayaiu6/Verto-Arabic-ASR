@@ -1,5 +1,5 @@
-import {verifyBytes} from './model-cache.mjs?v=c81afcca59b61bab9249';
-import {validateSamples} from './core.mjs?v=c81afcca59b61bab9249';
+import {verifyBytes} from './model-cache.mjs?v=734c17f1e6c065dee2c9';
+import {validateSamples} from './core.mjs?v=734c17f1e6c065dee2c9';
 
 export function assertExamplesPublishable(manifest){
  if(manifest.previewOnly)throw new Error('Unconfirmed audio distribution rights: local preview only');

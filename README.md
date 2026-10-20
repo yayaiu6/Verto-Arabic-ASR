@@ -1,6 +1,6 @@
 # Verto Arabic ASR
 
-Browser transcription for Egyptian Arabic and mixed Arabic–English audio. Record or upload a 0.5–30 second clip. Processing stays on your device.
+Browser transcription for Egyptian Arabic and mixed Arabic–English audio. Record or upload a 0.5–60 second clip. Processing stays on your device.
 
 **Preview.** Accuracy has not been evaluated against human-reviewed references. WebGPU is optional and may use mixed CPU placement. CPU/WASM is the default.
 

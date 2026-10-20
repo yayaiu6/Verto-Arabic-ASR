@@ -23,7 +23,7 @@ class PcmCapture extends AudioWorkletProcessor {
     if (this.stopped) return false;
     const input=inputs[0];
     if(input?.length && input[0].length){
-      const count=Math.min(input[0].length,Math.max(0,Math.floor(sampleRate*30)-this.frames));
+      const count=Math.min(input[0].length,Math.max(0,Math.floor(sampleRate*60)-this.frames));
       for(let i=0;i<count;i++){
         let value=0;
         for(const channel of input)value+=(channel[i]||0)/input.length;

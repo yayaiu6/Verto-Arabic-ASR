@@ -1,6 +1,6 @@
 export function validateSamples(samples) {
   if (!(samples instanceof Float32Array)) throw new Error('Expected mono Float32 PCM at 16000 Hz');
-  if (samples.length < 8000 || samples.length > 480000) throw new Error('Choose 0.5 to 30 seconds of audio');
+  if (samples.length < 8000 || samples.length > 960000) throw new Error('Choose 0.5 to 60 seconds of audio');
   if (!samples.every(Number.isFinite)) throw new Error('Audio must contain finite samples');
 }
 

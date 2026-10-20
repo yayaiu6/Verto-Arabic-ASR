@@ -1,5 +1,5 @@
 {
-  "version": "c81afcca59b61bab9249",
+  "version": "734c17f1e6c065dee2c9",
   "dependencies": {
     "onnxruntime-web": "1.23.2",
     "@ffmpeg/ffmpeg": "0.12.15",
@@ -9,43 +9,43 @@
   "files": [
     {
       "path": "index.html",
-      "bytes": 34777,
-      "sha256": "4f80bc281fb78ebd5bbe27d16c3e72a89757398718084191ab35f426c4c49c38"
+      "bytes": 34849,
+      "sha256": "379d5f66ee9e3d816660a9c43718877d91cb8e53506466754d117a032336ec8e"
     },
     {
       "path": "assets/app/audio.mjs",
       "bytes": 10640,
-      "sha256": "a3d88a3ee2963d3da6afd5f85057f38ff6d03aed533f537457ebfa5612cc1a3c"
+      "sha256": "babf043ff40832232480cc2310fb59df249436f7dac10e75de74ab97c503f46f"
     },
     {
       "path": "assets/app/capture-worklet.mjs",
       "bytes": 1240,
-      "sha256": "0634b6b8bb8a24a90eb466f2766463cf22fb043c2ea099dc3c0020cf1e66879e"
+      "sha256": "f087ad62818a94e3925dc527299131cdf93a7fe35ae088d681d812f6e303586c"
     },
     {
       "path": "assets/app/convert-audio.mjs",
       "bytes": 1891,
-      "sha256": "d9a8f665df83afe3ea05538066fc255e0f2a90711e56e970d13268ccd2687cbf"
+      "sha256": "6d3d8b2439fde8a1e944d0273b5bd29b822d1411731916a6fa8587c3922fcb35"
     },
     {
       "path": "assets/app/core.mjs",
       "bytes": 2799,
-      "sha256": "82a3a68db58bc94fe16bd72c359868b13a95ca609e555c1da9412c4b25bc09d7"
+      "sha256": "e9a9c106b71b712276ebbc33ad28166b237dfe6c23b46d0e9204e4f2072d4080"
     },
     {
       "path": "assets/app/developer.html",
       "bytes": 1408,
-      "sha256": "94353311ed5695a0ec0d10ec19839597b2915248d63cfa4c1a77850ac7fc09dc"
+      "sha256": "250369d3a4cbed1572218cd9d6b0f046eeeb69385468c1ac64a2e5e2cb83b765"
     },
     {
       "path": "assets/app/examples.mjs",
       "bytes": 1612,
-      "sha256": "e7d5c72090d6ded58c72fb2bb692b35b219eb4b7281ac1022e1088b90f1f8041"
+      "sha256": "13d3b955dcc412776741d7efe66a7398e12bb8737de90b8ca8ad44215621af73"
     },
     {
       "path": "assets/app/i18n.mjs",
       "bytes": 17295,
-      "sha256": "c180401e03ddddc0b5c6a67a4fc2e2806090d00ac914f4af1f3f485cc964aa0a"
+      "sha256": "f060b67c1e94c63dacf49a4bcac5b4f275c1b884d6120fa1b2a1044aae58593b"
     },
     {
       "path": "assets/app/model-cache.mjs",
@@ -55,12 +55,12 @@
     {
       "path": "assets/app/verto.mjs",
       "bytes": 2159,
-      "sha256": "d9fdce79bc4510b97e13521799c9630b14571433de5768048707c80e7ab09010"
+      "sha256": "704e112f64ea69885dc08f5b7e4aaf6492d9afe136758d1742549579f86ce160"
     },
     {
       "path": "assets/app/worker.mjs",
       "bytes": 4136,
-      "sha256": "077dbe7df923e59b40b259f23761b286c6c393013ead93868e7d930a5e6816e7"
+      "sha256": "89804d4743152ac4df208478cfd9c088dc94c9cfb01582f7d5faf88ce60ff993"
     },
     {
       "path": "assets/config.json",
@@ -275,7 +275,7 @@
     {
       "path": "assets/precache.json",
       "bytes": 619,
-      "sha256": "06113ae1c79db26f22af28c88408f5c0708021ecaeb14a0cfd86661e4b43542b"
+      "sha256": "11647540fce346850ca74d8200cbf782323774f97a60971bfcf0c85363607c85"
     },
     {
       "path": "assets/runtime/1.23.2/ort-wasm-simd-threaded.asyncify.mjs",
@@ -315,7 +315,7 @@
     {
       "path": "assets/sw.js",
       "bytes": 1601,
-      "sha256": "6f567417450cd1b060412ffe9e728a8855cb9b77cc96fe4e944791cf765a23b1"
+      "sha256": "f650bc9bc5c8b9d0d6ecad6ba58ce35100c34d2f89c2a0ad4c7ed15b3e0b3cab"
     }
   ]
 }

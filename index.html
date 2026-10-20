@@ -725,8 +725,8 @@ body.model-loading { overflow: hidden; }
 <section class="examples" aria-labelledby="examples-title"><div class="examples-heading"><h2 id="examples-title">أمثلة صوتية</h2><span id="examples-note">معاينة محلية · حقوق توزيع التسجيلات غير محسومة</span></div><div id="example-list" class="example-grid"></div></section>
 <section class="workspace">
 <div class="input-side">
-<div class="section-label"><h2>الصوت</h2><span class="clip-limit">0.5–30 ثانية</span></div>
-<button id="record" class="record-button"><span class="mic-icon" aria-hidden="true">●</span><strong id="record-label">تسجيل</strong><span id="record-hint">حتى 30 ثانية</span></button>
+<div class="section-label"><h2>الصوت</h2><span class="clip-limit">0.5–60 ثانية</span></div>
+<button id="record" class="record-button"><span class="mic-icon" aria-hidden="true">●</span><strong id="record-label">تسجيل</strong><span id="record-hint">حتى 60 ثانية</span></button>
 <div id="recording-panel" hidden><span class="record-dot"></span><span id="timer">00:00</span><meter id="level" min="0" max="1" value="0" aria-label="مستوى صوت الميكروفون"></meter></div>
 <div class="divider"><span>أو</span></div>
 <label class="upload" for="audio"><strong>رفع ملف</strong><span>OGG / Opus · WAV · MP3 · M4A · FLAC · WebM · PCM</span><input id="audio" type="file" aria-label="رفع ملف صوت" accept="audio/*,video/*,.wav,.wave,.mp3,.m4a,.aac,.ogg,.oga,.opus,.webm,.flac,.pcm,.raw,.aif,.aiff,.amr,.3gp,.mp4,.mkv,.wma,.caf,.m4b"></label>
@@ -741,12 +741,12 @@ body.model-loading { overflow: hidden; }
 <section class="status-card" aria-live="polite"><span id="status-icon" aria-hidden="true">○</span><div><strong id="status" role="status">جاهز</strong><span id="status-detail">تنزيل الموديل عند أول تفريغ: حوالي 70 MB.</span></div><progress id="progress" aria-label="تقدم تحميل الموديل" max="100" hidden></progress></section>
 <p id="storage-note" class="storage-note" hidden>تعذر حفظ الموديل. يعمل في هذه الجلسة، وقد تحتاج لتنزيله عند فتح الصفحة مجددًا.</p>
 <details class="settings"><summary>إعدادات التشغيل والتفاصيل التقنية</summary><div class="settings-row"><label>محرك التشغيل <select id="mode"><option value="wasm">CPU — الافتراضي</option><option value="webgpu">تجربة WebGPU مع رجوع تلقائي إلى CPU</option></select></label><button id="load" class="subtle">إعادة تحميل الموديل</button><label><input id="benchmark" type="checkbox"> قياس الأداء: إحماء + 5 محاولات</label></div><button id="clear-cache" class="subtle" type="button">مسح الموديل المحفوظ</button><pre id="device"></pre><pre id="metrics"></pre></details>
-<footer>Verto Arabic ASR · Preview · INT8 · مقاطع من 0.5 إلى 30 ثانية<br>التسجيل والتحويل محليان. الدقة قد تختلف حسب وضوح الصوت واللهجة.<br><a href="https://github.com/yayaiu6/Verto-Arabic-ASR">GitHub</a> · <a href="https://huggingface.co/yayaiu6/Verto-Arabic-ASR">Model</a> · <a href="/assets/licenses/NOTICES.md">Licenses</a></footer>
+<footer>Verto Arabic ASR · Preview · INT8 · مقاطع من 0.5 إلى 60 ثانية<br>التسجيل والتحويل محليان. الدقة قد تختلف حسب وضوح الصوت واللهجة.<br><a href="https://github.com/yayaiu6/Verto-Arabic-ASR">GitHub</a> · <a href="https://huggingface.co/yayaiu6/Verto-Arabic-ASR">Model</a> · <a href="/assets/licenses/NOTICES.md">Licenses</a></footer>
 </main><script type="module">
-import {readAudio,audioError,recordMicrophone,encodeWav} from '/assets/app/audio.mjs?v=c81afcca59b61bab9249';
-import {validateSamples} from '/assets/app/core.mjs?v=c81afcca59b61bab9249';
-import {initLanguage} from '/assets/app/i18n.mjs?v=c81afcca59b61bab9249';
-import {createExampleLoader,assertExamplesPublishable} from '/assets/app/examples.mjs?v=c81afcca59b61bab9249';
+import {readAudio,audioError,recordMicrophone,encodeWav} from '/assets/app/audio.mjs?v=734c17f1e6c065dee2c9';
+import {validateSamples} from '/assets/app/core.mjs?v=734c17f1e6c065dee2c9';
+import {initLanguage} from '/assets/app/i18n.mjs?v=734c17f1e6c065dee2c9';
+import {createExampleLoader,assertExamplesPublishable} from '/assets/app/examples.mjs?v=734c17f1e6c065dee2c9';
 function formatTranscript(text){
  return text.replace(/(^|[^\p{L}\p{M}\p{N}_])ال(?=[ \t]+[A-Za-z])/gu,'$1الـ');
 }
@@ -771,7 +771,7 @@ function clearResult(){
   $('text').value='';$('copy').disabled=true;$('metrics').textContent='';
   $('result-summary').textContent='النص هيظهر هنا بعد تفريغ الصوت الجديد.';
 }
-function attachWorker(){worker=new Worker(new URL('/assets/app/worker.mjs?v=c81afcca59b61bab9249',import.meta.url),{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
+function attachWorker(){worker=new Worker(new URL('/assets/app/worker.mjs?v=734c17f1e6c065dee2c9',import.meta.url),{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
 function setAudio(pcm,name){
   recordingInfo=null;
   validateSamples(pcm);samples=pcm;
@@ -886,7 +886,7 @@ async function initExamples(){
 async function stopRecording(){
   if(!recorder)return;
   const active=recorder;recorder=null;clearInterval(tick);tick=null;working=true;controls();
-  $('record').classList.remove('recording');$('record-label').textContent='تسجيل';$('record-hint').textContent='حتى 30 ثانية';$('recording-panel').hidden=true;
+  $('record').classList.remove('recording');$('record-label').textContent='تسجيل';$('record-hint').textContent='حتى 60 ثانية';$('recording-panel').hidden=true;
   try{setAudio(await active.stop(),'تسجيل الميكروفون');recordingInfo=active.diagnostics;working=false;await transcribe();}catch(e){finishError(e);}
 }
 $('record').onclick=async()=>{
@@ -897,7 +897,7 @@ $('record').onclick=async()=>{
   try{
     recorder=await recordMicrophone(level=>{$('level').value=level;});working=false;$('audio').value='';samples=null;clearResult();$('selected').hidden=true;
     $('record').classList.add('recording');$('record-label').textContent='إيقاف وتفريغ التسجيل';$('record-hint').textContent='اضغط لإيقاف التسجيل';$('recording-panel').hidden=false;$('timer').textContent='00:00';
-    const start=performance.now();tick=setInterval(()=>{const sec=Math.floor((performance.now()-start)/1000);$('timer').textContent=`00:${String(Math.min(30,sec)).padStart(2,'0')}`;if(sec>=30)stopRecording();},100);
+    const start=performance.now();tick=setInterval(()=>{const sec=Math.floor((performance.now()-start)/1000);const elapsed=Math.min(60,sec);$('timer').textContent=`${String(Math.floor(elapsed/60)).padStart(2,'0')}:${String(elapsed%60).padStart(2,'0')}`;if(sec>=60)stopRecording();},100);
     status('جاري التسجيل…','اضغط إيقاف عند انتهاء التسجيل.');controls();
   }catch(e){finishError(e);}
 };

@@ -1,5 +1,5 @@
-import {readAudio} from './audio.mjs?v=c81afcca59b61bab9249';
-import {validateConfig} from './model-cache.mjs?v=c81afcca59b61bab9249';
+import {readAudio} from './audio.mjs?v=734c17f1e6c065dee2c9';
+import {validateConfig} from './model-cache.mjs?v=734c17f1e6c065dee2c9';
 
 /** Browser client. Serve this module and the runtime assets from the same origin. */
 export class VertoASR {
@@ -10,7 +10,7 @@ export class VertoASR {
     catch (error) {client.close(); throw error;}
   }
   constructor({onProgress = () => {}} = {}) {
-    this.worker = new Worker(new URL('./worker.mjs?v=c81afcca59b61bab9249', import.meta.url), {type: 'module'});
+    this.worker = new Worker(new URL('./worker.mjs?v=734c17f1e6c065dee2c9', import.meta.url), {type: 'module'});
     this.pending = null;
     this.closed = false;
     this.worker.onmessage = ({data}) => {

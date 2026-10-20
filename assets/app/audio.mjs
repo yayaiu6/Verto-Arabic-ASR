@@ -1,5 +1,5 @@
 export function audioError(e) {
-  if(/Choose 0.5/.test(e?.message||''))return 'مدة الصوت يجب أن تكون من 0.5 إلى 30 ثانية. سجّل مقطع أطول أو اختار مثال جاهز.';
+  if(/Choose 0.5/.test(e?.message||''))return 'مدة الصوت يجب أن تكون من 0.5 إلى 60 ثانية. سجّل مقطع أطول أو اختار مثال جاهز.';
   if(['NotAllowedError','SecurityError'].includes(e?.name)) return 'اسمح باستخدام الميكروفون من علامة القفل جنب العنوان، ثم جرّب التسجيل مرة تانية.';
   if(e?.name==='NotFoundError') return 'مش لاقيين ميكروفون متصل. وصّل ميكروفون أو جرّب مثال جاهز.';
   if(e?.name==='NotReadableError') return 'الميكروفون مش متاح. اقفل أي برنامج تاني بيستخدمه وجرّب تاني.';
@@ -37,7 +37,7 @@ export function parseWav(buffer) {
   if(![8,16,24,32].includes(bits) || format===3&&bits!==32 || align!==channels*bits/8) return null;
   if(channels>32 || rate<8000 || rate>384000) throw new Error('Unsupported WAV sample rate or channels');
   const frames=Math.floor(data.size/align);
-  if(frames/rate>30) throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 30 ثانية');
+  if(frames/rate>60) throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 60 ثانية');
   const samples=new Float32Array(frames);
   for(let i=0;i<frames;i++) for(let c=0;c<channels;c++) {
     const at=data.start+i*align+c*bits/8;let x;
@@ -63,7 +63,7 @@ export function parseRawPcm(buffer,{format,sampleRate,channels}={}) {
   const width=sizes[format],stride=width*channels;
   if(!buffer.byteLength||buffer.byteLength%stride)throw new Error('حجم ملف PCM لا يطابق إعدادات العينات والقنوات.');
   const frames=buffer.byteLength/stride;
-  if(frames/sampleRate<.5||frames/sampleRate>30)throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 30 ثانية');
+  if(frames/sampleRate<.5||frames/sampleRate>60)throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 60 ثانية');
   const v=new DataView(buffer),samples=new Float32Array(frames);
   for(let i=0;i<frames;i++)for(let c=0;c<channels;c++){
     const at=i*stride+c*width;let x;
@@ -78,7 +78,7 @@ export function parseRawPcm(buffer,{format,sampleRate,channels}={}) {
 }
 export async function readAudio(file,{pcm,onStatus=()=>{}}={}) {
   if(!file.size) throw new Error('الملف فاضي. اختار تسجيل فيه صوت أو جرّب مثال جاهز.');
-  if(file.size>100*1024*1024) throw new Error('الملف كبير جدًا. اختار مقطع صوت لا يتجاوز 30 ثانية.');
+  if(file.size>100*1024*1024) throw new Error('الملف كبير جدًا. اختار مقطع صوت لا يتجاوز 60 ثانية.');
   const bytes=await file.arrayBuffer(),wav=parseWav(bytes);
   if(wav) return resample(wav.samples,wav.sampleRate);
   if(/\.(pcm|raw)$/i.test(file.name)){const raw=parseRawPcm(bytes,pcm);return resample(raw.samples,raw.sampleRate);}
@@ -86,10 +86,10 @@ export async function readAudio(file,{pcm,onStatus=()=>{}}={}) {
   try{const context=new OfflineAudioContext(1,1,16000);decoded=await context.decodeAudioData(bytes.slice(0));}
   catch{
     onStatus('المتصفح مش بيفك الصيغة دي مباشرة. بنجهز التحويل المحلي…');
-    const {convertAudio}=await import('./convert-audio.mjs?v=c81afcca59b61bab9249');
+    const {convertAudio}=await import('./convert-audio.mjs?v=734c17f1e6c065dee2c9');
     return convertAudio(bytes,onStatus);
   }
-  if(decoded.duration<.5 || decoded.duration>30) throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 30 ثانية');
+  if(decoded.duration<.5 || decoded.duration>60) throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 60 ثانية');
   const samples=new Float32Array(decoded.length);
   for(let c=0;c<decoded.numberOfChannels;c++){const channel=decoded.getChannelData(c);for(let i=0;i<samples.length;i++)samples[i]+=channel[i]/decoded.numberOfChannels;}
   return samples;
@@ -102,7 +102,7 @@ export async function recordMicrophone(onLevel) {
   let context;
   try {
     // Capture at the device's preferred rate; resample once after recording.
-    context=new AudioContext({latencyHint:'playback'});await context.audioWorklet.addModule('/assets/app/capture-worklet.mjs?v=c81afcca59b61bab9249');
+    context=new AudioContext({latencyHint:'playback'});await context.audioWorklet.addModule('/assets/app/capture-worklet.mjs?v=734c17f1e6c065dee2c9');
     const chunks=[],source=context.createMediaStreamSource(stream),node=new AudioWorkletNode(context,'pcm-capture');
     let stopped=false,interrupted=false,captureError=null,finishCapture=null,chunkCount=0,diagnostics=null;
     node.port.onmessage=({data})=>{
@@ -130,11 +130,11 @@ export async function recordMicrophone(onLevel) {
         });
         const count=chunks.reduce((n,c)=>n+c.length,0),rate=context.sampleRate;
         if(captureError||count!==ended.frames||rate!==ended.sampleRate)throw captureError||new Error('التسجيل غير مكتمل. أعد التسجيل.');
-        if(count/rate<.5)throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 30 ثانية');
+        if(count/rate<.5)throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 60 ثانية');
         const samples=new Float32Array(count);let at=0;
         for(const chunk of chunks){samples.set(chunk,at);at+=chunk.length;}
         diagnostics={sampleRate:rate,capturedFrames:count,chunks:chunkCount,seconds:count/rate,outputSampleRate:16000,captureSettings};
-        return (await resample(samples,rate)).slice(0,480000);
+        return (await resample(samples,rate)).slice(0,960000);
       }finally{
         clearTimeout(timeout);finishCapture=null;node.port.onmessage=null;node.onprocessorerror=null;
         context.onstatechange=null;node.disconnect();await context.close();
