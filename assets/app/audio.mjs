@@ -86,7 +86,7 @@ export async function readAudio(file,{pcm,onStatus=()=>{}}={}) {
   try{const context=new OfflineAudioContext(1,1,16000);decoded=await context.decodeAudioData(bytes.slice(0));}
   catch{
     onStatus('المتصفح مش بيفك الصيغة دي مباشرة. بنجهز التحويل المحلي…');
-    const {convertAudio}=await import('./convert-audio.mjs?v=7c6e079d3c5326387ddd');
+    const {convertAudio}=await import('./convert-audio.mjs?v=c81afcca59b61bab9249');
     return convertAudio(bytes,onStatus);
   }
   if(decoded.duration<.5 || decoded.duration>30) throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 30 ثانية');
@@ -96,11 +96,13 @@ export async function readAudio(file,{pcm,onStatus=()=>{}}={}) {
 }
 export async function recordMicrophone(onLevel) {
   if(!navigator.mediaDevices?.getUserMedia) throw new Error('التسجيل يحتاج متصفح حديث على localhost أو HTTPS. جرّب مثال جاهز أو ارفع ملف.');
-  const stream=await navigator.mediaDevices.getUserMedia({audio:{channelCount:1,echoCancellation:true,noiseSuppression:true}});
+  const stream=await navigator.mediaDevices.getUserMedia({audio:{channelCount:1,echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  const settings=stream.getAudioTracks()[0]?.getSettings?.()||{};
+  const captureSettings=Object.fromEntries(['sampleRate','channelCount','echoCancellation','noiseSuppression','autoGainControl'].filter(key=>key in settings).map(key=>[key,settings[key]]));
   let context;
   try {
     // Capture at the device's preferred rate; resample once after recording.
-    context=new AudioContext({latencyHint:'playback'});await context.audioWorklet.addModule('/assets/app/capture-worklet.mjs?v=7c6e079d3c5326387ddd');
+    context=new AudioContext({latencyHint:'playback'});await context.audioWorklet.addModule('/assets/app/capture-worklet.mjs?v=c81afcca59b61bab9249');
     const chunks=[],source=context.createMediaStreamSource(stream),node=new AudioWorkletNode(context,'pcm-capture');
     let stopped=false,interrupted=false,captureError=null,finishCapture=null,chunkCount=0,diagnostics=null;
     node.port.onmessage=({data})=>{
@@ -131,7 +133,7 @@ export async function recordMicrophone(onLevel) {
         if(count/rate<.5)throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 30 ثانية');
         const samples=new Float32Array(count);let at=0;
         for(const chunk of chunks){samples.set(chunk,at);at+=chunk.length;}
-        diagnostics={sampleRate:rate,capturedFrames:count,chunks:chunkCount,seconds:count/rate,outputSampleRate:16000};
+        diagnostics={sampleRate:rate,capturedFrames:count,chunks:chunkCount,seconds:count/rate,outputSampleRate:16000,captureSettings};
         return (await resample(samples,rate)).slice(0,480000);
       }finally{
         clearTimeout(timeout);finishCapture=null;node.port.onmessage=null;node.onprocessorerror=null;

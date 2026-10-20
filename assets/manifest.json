@@ -1,5 +1,5 @@
 {
-  "version": "7c6e079d3c5326387ddd",
+  "version": "c81afcca59b61bab9249",
   "dependencies": {
     "onnxruntime-web": "1.23.2",
     "@ffmpeg/ffmpeg": "0.12.15",
@@ -10,12 +10,12 @@
     {
       "path": "index.html",
       "bytes": 34777,
-      "sha256": "cac98039c7de576d4a40a659736e90eacf01093992082f933816c714cf6666a0"
+      "sha256": "4f80bc281fb78ebd5bbe27d16c3e72a89757398718084191ab35f426c4c49c38"
     },
     {
       "path": "assets/app/audio.mjs",
-      "bytes": 10344,
-      "sha256": "3febfd3715f0a659522495b1056b4428c416626899027a7eddb99bd859d8a5ad"
+      "bytes": 10640,
+      "sha256": "a3d88a3ee2963d3da6afd5f85057f38ff6d03aed533f537457ebfa5612cc1a3c"
     },
     {
       "path": "assets/app/capture-worklet.mjs",
@@ -35,12 +35,12 @@
     {
       "path": "assets/app/developer.html",
       "bytes": 1408,
-      "sha256": "9747666d8b250f44352b4d7a37e73a02245035ff34390cfe830a53bff5b91aaf"
+      "sha256": "94353311ed5695a0ec0d10ec19839597b2915248d63cfa4c1a77850ac7fc09dc"
     },
     {
       "path": "assets/app/examples.mjs",
       "bytes": 1612,
-      "sha256": "039f9f710771b4af30e61111d43a1d65b0d39ff4d15cd5f33f7b93481d9a3af7"
+      "sha256": "e7d5c72090d6ded58c72fb2bb692b35b219eb4b7281ac1022e1088b90f1f8041"
     },
     {
       "path": "assets/app/i18n.mjs",
@@ -55,12 +55,12 @@
     {
       "path": "assets/app/verto.mjs",
       "bytes": 2159,
-      "sha256": "5ad5ab76d5b7d946602cc01691573e929f120fa1d67714bfe21d619a0459cee8"
+      "sha256": "d9fdce79bc4510b97e13521799c9630b14571433de5768048707c80e7ab09010"
     },
     {
       "path": "assets/app/worker.mjs",
       "bytes": 4136,
-      "sha256": "61ebf7f1811f2fb24188af229013217913baded4f80f4b38dd2a51b490104bdb"
+      "sha256": "077dbe7df923e59b40b259f23761b286c6c393013ead93868e7d930a5e6816e7"
     },
     {
       "path": "assets/config.json",
@@ -275,7 +275,7 @@
     {
       "path": "assets/precache.json",
       "bytes": 619,
-      "sha256": "f9ddd25f959f03f88eddfb6ae68a41520e631003bfe71487e2ee892e28a0dab6"
+      "sha256": "06113ae1c79db26f22af28c88408f5c0708021ecaeb14a0cfd86661e4b43542b"
     },
     {
       "path": "assets/runtime/1.23.2/ort-wasm-simd-threaded.asyncify.mjs",
@@ -315,7 +315,7 @@
     {
       "path": "assets/sw.js",
       "bytes": 1601,
-      "sha256": "537fdf73cbe5a4a24d771042e50b92eb0732190001a562af35037b36f1816189"
+      "sha256": "6f567417450cd1b060412ffe9e728a8855cb9b77cc96fe4e944791cf765a23b1"
     }
   ]
 }

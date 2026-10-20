@@ -743,10 +743,10 @@ body.model-loading { overflow: hidden; }
 <details class="settings"><summary>إعدادات التشغيل والتفاصيل التقنية</summary><div class="settings-row"><label>محرك التشغيل <select id="mode"><option value="wasm">CPU — الافتراضي</option><option value="webgpu">تجربة WebGPU مع رجوع تلقائي إلى CPU</option></select></label><button id="load" class="subtle">إعادة تحميل الموديل</button><label><input id="benchmark" type="checkbox"> قياس الأداء: إحماء + 5 محاولات</label></div><button id="clear-cache" class="subtle" type="button">مسح الموديل المحفوظ</button><pre id="device"></pre><pre id="metrics"></pre></details>
 <footer>Verto Arabic ASR · Preview · INT8 · مقاطع من 0.5 إلى 30 ثانية<br>التسجيل والتحويل محليان. الدقة قد تختلف حسب وضوح الصوت واللهجة.<br><a href="https://github.com/yayaiu6/Verto-Arabic-ASR">GitHub</a> · <a href="https://huggingface.co/yayaiu6/Verto-Arabic-ASR">Model</a> · <a href="/assets/licenses/NOTICES.md">Licenses</a></footer>
 </main><script type="module">
-import {readAudio,audioError,recordMicrophone,encodeWav} from '/assets/app/audio.mjs?v=7c6e079d3c5326387ddd';
-import {validateSamples} from '/assets/app/core.mjs?v=7c6e079d3c5326387ddd';
-import {initLanguage} from '/assets/app/i18n.mjs?v=7c6e079d3c5326387ddd';
-import {createExampleLoader,assertExamplesPublishable} from '/assets/app/examples.mjs?v=7c6e079d3c5326387ddd';
+import {readAudio,audioError,recordMicrophone,encodeWav} from '/assets/app/audio.mjs?v=c81afcca59b61bab9249';
+import {validateSamples} from '/assets/app/core.mjs?v=c81afcca59b61bab9249';
+import {initLanguage} from '/assets/app/i18n.mjs?v=c81afcca59b61bab9249';
+import {createExampleLoader,assertExamplesPublishable} from '/assets/app/examples.mjs?v=c81afcca59b61bab9249';
 function formatTranscript(text){
  return text.replace(/(^|[^\p{L}\p{M}\p{N}_])ال(?=[ \t]+[A-Za-z])/gu,'$1الـ');
 }
@@ -771,7 +771,7 @@ function clearResult(){
   $('text').value='';$('copy').disabled=true;$('metrics').textContent='';
   $('result-summary').textContent='النص هيظهر هنا بعد تفريغ الصوت الجديد.';
 }
-function attachWorker(){worker=new Worker(new URL('/assets/app/worker.mjs?v=7c6e079d3c5326387ddd',import.meta.url),{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
+function attachWorker(){worker=new Worker(new URL('/assets/app/worker.mjs?v=c81afcca59b61bab9249',import.meta.url),{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
 function setAudio(pcm,name){
   recordingInfo=null;
   validateSamples(pcm);samples=pcm;
