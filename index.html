@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verto Arabic ASR</title><style>
+@font-face {
+  font-family: "IBM Plex Sans Arabic";
+  src: url("/assets/fonts/IBMPlexSansArabic-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+:root {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  color: #eaf0ef;
+  background: #0c1417;
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+main {
+  max-width: 1140px;
+  margin: auto;
+  padding: 0 32px;
+}
+header {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #253235;
+}
+.brand {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.4px;
+  color: #e7f1ed;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  direction: ltr;
+}
+.brand span {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #9aabaa;
+}
+.privacy {
+  font-size: 12px;
+  color: #a3dec1;
+}
+.intro {
+  text-align: start;
+  padding: 25px 0 24px;
+}
+h1 {
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 550;
+  letter-spacing: -0.4px;
+  margin: 0 0 8px;
+}
+p {
+  color: #9eafaf;
+  line-height: 1.8;
+  margin: 0;
+  font-size: 16px;
+}
+.workspace {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #121f23;
+  border: 1px solid #2a3b3f;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.input-side,
+.output-side {
+  padding: 26px;
+}
+.input-side {
+  border-left: 1px solid #2a3b3f;
+}
+.output-side {
+  display: flex;
+  flex-direction: column;
+  background: #101b1f;
+}
+.section-label {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+h2 {
+  font-size: 16px;
+  margin: 0;
+}
+.section-label .subtle {
+  margin-inline-start: auto;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+button:focus-visible,
+.upload:focus-within,
+textarea:focus-visible {
+  outline: 2px solid #b7e8c9;
+  outline-offset: 4px;
+}
+.record-button {
+  width: 100%;
+  border: 1px solid #42685b;
+  background: #1d342d;
+  color: #e8f5ed;
+  border-radius: 14px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 7px;
+}
+.record-button:hover:not(:disabled) {
+  background: #274237;
+}
+.mic-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #b5e7c9;
+  color: #21412f;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  margin-bottom: 3px;
+}
+.record-button strong {
+  font-size: 18px;
+}
+.record-button > span:last-child {
+  font-size: 12px;
+  color: #a3b9ac;
+}
+.record-button.recording {
+  background: #442828;
+  border-color: #9e5757;
+}
+.recording .mic-icon {
+  background: #e99b92;
+  color: #532321;
+}
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #819697;
+  font-size: 12px;
+  margin: 16px 0;
+}
+.divider:before,
+.divider:after {
+  content: "";
+  height: 1px;
+  background: #2b3b3c;
+  flex: 1;
+}
+.upload {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 4px;
+  border: 1px dashed #506362;
+  border-radius: 12px;
+  padding: 15px;
+  cursor: pointer;
+  background: #152429;
+  overflow: hidden;
+}
+.upload strong {
+  font-size: 14px;
+}
+.upload span {
+  color: #8eaaaa;
+  font-size: 11px;
+}
+.upload input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  cursor: pointer;
+}
+.primary {
+  margin-top: 16px;
+  width: 100%;
+  background: #b7e8c9;
+  color: #162a20;
+  border: 0;
+  border-radius: 11px;
+  padding: 15px 20px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+}
+.primary:hover:not(:disabled) {
+  background: #d0f6dc;
+}
+.selected {
+  background: #192b2b;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 12px;
+}
+.selected strong {
+  display: inline-block;
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.selected > span {
+  float: left;
+  color: #adc2ba;
+}
+audio {
+  width: 100%;
+  height: 34px;
+  margin-top: 10px;
+}
+textarea {
+  background: transparent;
+  border: 0;
+  resize: vertical;
+  min-height: 280px;
+  width: 100%;
+  flex: 1;
+  color: #edf4ed;
+  line-height: 2;
+  font-size: 18px;
+  unicode-bidi: plaintext;
+  padding: 0;
+}
+textarea::placeholder {
+  font-size: 16px;
+  color: #668084;
+  line-height: 2.1;
+}
+.subtle {
+  background: transparent;
+  border: 1px solid #3a4c4d;
+  border-radius: 7px;
+  padding: 6px 10px;
+  color: #cad9d3;
+  font-size: 12px;
+}
+.result-summary {
+  font-size: 12px;
+  color: #87a499;
+  border-top: 1px solid #283b3b;
+  padding-top: 16px;
+  margin-top: 20px;
+}
+.status-card {
+  background: #132124;
+  border: 1px solid #293b3b;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 17px 22px;
+  margin-top: 18px;
+}
+.status-card > span {
+  font-size: 25px;
+  color: #b7e8c9;
+}
+.status-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.status-card strong {
+  font-size: 14px;
+}
+.status-card div > span {
+  color: #8fa6a2;
+  font-size: 12px;
+}
+.status-card.error {
+  border-color: #8b514b;
+}
+.status-card.error #status {
+  color: #ffb7ac;
+}
+progress {
+  width: 110px;
+  accent-color: #b7e8c9;
+}
+.settings {
+  margin-top: 22px;
+  font-size: 12px;
+  color: #8ba19b;
+}
+.settings summary {
+  cursor: pointer;
+}
+.settings-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  margin-top: 15px;
+}
+select {
+  background: #15262a;
+  color: #dae6df;
+  border: 1px solid #3b4e4b;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+pre {
+  direction: ltr;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  max-height: 250px;
+  overflow: auto;
+}
+footer {
+  text-align: center;
+  font-size: 11px;
+  color: #677f7b;
+  line-height: 1.8;
+  padding: 25px 0 32px;
+}
+#recording-panel {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  direction: ltr;
+}
+[hidden] {
+  display: none !important;
+}
+.record-dot {
+  width: 8px;
+  height: 8px;
+  background: #ec8b7a;
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+}
+meter {
+  width: 100%;
+  height: 12px;
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+@media (max-width: 720px) {
+  main {
+    padding: 0 16px;
+  }
+  header {
+    height: 72px;
+  }
+  .brand span {
+    display: none;
+  }
+  .intro {
+    padding-top: 28px;
+  }
+  p {
+    font-size: 14px;
+  }
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+  .input-side {
+    border-left: 0;
+    border-bottom: 1px solid #2a3b3f;
+  }
+  .input-side,
+  .output-side {
+    padding: 22px;
+  }
+  textarea {
+    min-height: 230px;
+  }
+  .status-card {
+    padding: 14px;
+  }
+  progress {
+    width: 60px;
+  }
+}
+[dir="ltr"] .input-side {
+  border-left: 0;
+  border-right: 1px solid #2a3b3f;
+}
+[dir="ltr"] .selected > span {
+  float: right;
+}
+.selected > span {
+  margin-inline-start: 10px;
+}
+@media (max-width: 720px) {
+  [dir="ltr"] .input-side {
+    border-right: 0;
+  }
+}
+
+header {
+  justify-content: flex-start;
+  gap: 12px;
+  height: 76px;
+}
+header #language {
+  margin-inline-start: auto;
+}
+.badge {
+  font-size: 11px;
+  color: #b7e8c9;
+  background: #1d342d;
+  border: 1px solid #38564b;
+  padding: 4px 7px;
+  border-radius: 5px;
+}
+.examples {
+  margin: 0 0 22px;
+}
+.examples-heading {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.examples-heading > span {
+  font-size: 11px;
+  color: #8fa6a2;
+}
+.example-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.example-card {
+  border: 1px solid #2a3b3f;
+  border-radius: 12px;
+  padding: 15px;
+  background: #121f23;
+  min-width: 0;
+}
+.example-card.selected-example {
+  border-color: #a3dec1;
+}
+.example-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.example-meta strong {
+  font-size: 14px;
+  font-weight: 550;
+}
+.example-meta span {
+  font-size: 12px;
+  color: #8fa6a2;
+  white-space: nowrap;
+}
+.example-actions {
+  display: flex;
+  gap: 8px;
+}
+.example-actions button {
+  min-height: 38px;
+  flex: 1;
+}
+.sample {
+  background: #203a30;
+  border: 1px solid #42685b;
+  color: #d8efe0;
+  border-radius: 7px;
+  font-size: 12px;
+  padding: 7px 10px;
+}
+.sample:hover:not(:disabled) {
+  background: #2a4a3c;
+}
+.clip-limit {
+  direction: ltr;
+  unicode-bidi: isolate;
+  margin-inline-start: auto;
+  font-size: 12px;
+  color: #8fa6a2;
+}
+.intro p {
+  font-size: 13px;
+}
+.workspace .section-label {
+  margin-bottom: 16px;
+}
+.primary {
+  justify-content: center;
+}
+.input-side,
+.output-side {
+  min-width: 0;
+}
+.example-player {
+  margin-top: 10px;
+}
+footer a {
+  color: #9fb7ad;
+}
+.record-button {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.record-button strong {
+  font-size: 15px;
+}
+.record-button .mic-icon {
+  margin: 0;
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+}
+.record-button > span:last-child {
+  width: 100%;
+  font-size: 12px;
+}
+.status-card {
+  margin-top: 16px;
+}
+.settings-row {
+  padding-bottom: 12px;
+}
+button,
+select,
+summary {
+  min-height: 36px;
+}
+button:disabled {
+  opacity: 0.5;
+}
+.example-load-error {
+  font-size: 12px;
+  color: #ffb7ac;
+  margin-top: 8px;
+}
+.intro {
+  max-width: 850px;
+}
+textarea {
+  font-family: "IBM Plex Sans Arabic", Arial, sans-serif;
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: plaintext;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.9;
+  letter-spacing: normal;
+}
+.examples-heading h2 {
+  font-size: 14px;
+}
+@media (max-width: 720px) {
+  header {
+    height: 66px;
+  }
+  .brand {
+    font-size: 18px;
+  }
+  .example-grid {
+    grid-template-columns: 1fr;
+  }
+  .example-card {
+    padding: 12px;
+  }
+  .example-meta {
+    margin-bottom: 10px;
+  }
+  .examples-heading {
+    align-items: start;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .examples {
+    margin-bottom: 18px;
+  }
+  .intro {
+    padding: 20px 0;
+  }
+  .intro h1 {
+    font-size: 21px;
+    line-height: 1.65;
+  }
+  .example-actions button {
+    min-height: 40px;
+  }
+  .input-side,
+  .output-side {
+    padding: 18px;
+  }
+  .status-card {
+    align-items: start;
+    flex-wrap: wrap;
+  }
+  progress {
+    width: 100%;
+  }
+  .settings-row {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .record-dot {
+    animation: none;
+  }
+}
+.startup {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 24px;
+  background: #0c1417;
+}
+body.model-loading { overflow: hidden; }
+.startup:focus { outline: none; }
+.startup-panel { width: min(100%, 480px); }
+.startup-brand { font-size: 14px; font-weight: 650; color: #a3dec1; }
+.startup-panel h1 { margin: 22px 0 12px; font-size: 26px; line-height: 1.5; }
+.startup-panel p { font-size: 14px; }
+.startup-state { display: flex; flex-direction: column; gap: 8px; margin: 30px 0 16px; font-size: 14px; }
+.startup-state span { color: #9eafaf; font-size: 13px; line-height: 1.8; }
+.startup progress { width: 100%; height: 8px; display: block; }
+.startup-size { display: block; min-height: 24px; margin-top: 12px; font-size: 12px; color: #9eafaf; direction: ltr; }
+.storage-note { font-size: 12px; margin-top: 12px; color: #e6c69a; }
+
+@media (max-width: 720px) {
+  main { padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)); }
+  header { height: auto; min-height: 68px; gap: 8px; flex-wrap: wrap; padding-block: 10px; }
+  .brand { font-size: 17px; letter-spacing: -0.3px; }
+  .badge { font-size: 10px; padding: 3px 5px; }
+  button, select, summary, .example-actions button { min-height: 44px; touch-action: manipulation; }
+  #language { padding-inline: 10px; }
+  .intro { padding: 18px 0; }
+  .intro h1 { font-size: 20px; line-height: 1.65; }
+  .example-grid { gap: 8px; }
+  .example-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 10px; }
+  .example-meta { flex-direction: column; align-items: flex-start; gap: 3px; margin: 0; }
+  .example-meta strong { font-size: 13px; }
+  .example-meta span { font-size: 11px; }
+  .example-actions { gap: 6px; }
+  .example-actions button { flex: none; padding-inline: 9px; font-size: 12px; white-space: nowrap; }
+  .example-player, .example-load-error { grid-column: 1 / -1; }
+  .input-side, .output-side { padding: 16px; }
+  .record-button { padding: 14px; min-height: 80px; }
+  .divider { margin-block: 12px; }
+  .upload { padding: 14px 10px; min-height: 76px; }
+  .upload span { line-height: 1.7; }
+  #run { min-height: 50px; font-size: 16px; }
+  .output-side { scroll-margin-top: 12px; }
+  textarea { min-height: 280px; font-size: 18px; line-height: 1.9; }
+  textarea::placeholder { font-size: 16px; }
+  .result-summary { line-height: 1.8; overflow-wrap: anywhere; }
+  .selected strong { max-width: 100%; overflow-wrap: anywhere; }
+  .selected > span { float: none; display: block; margin: 4px 0 0; }
+  audio { height: 44px; min-width: 0; }
+  #pcm-options label, .settings-row > label { display: flex; flex-direction: column; gap: 6px; width: 100%; min-width: 0; }
+  #pcm-options label { margin-top: 12px; }
+  #pcm-options select, .settings select { width: 100%; max-width: 100%; min-width: 0; font-size: 16px; }
+  .settings-row > label:has(input[type="checkbox"]) { flex-direction: row; align-items: center; }
+  input[type="checkbox"] { width: 20px; height: 20px; flex-shrink: 0; }
+  .settings { padding-block: 14px; }
+  .settings summary { display: flex; align-items: center; line-height: 1.7; }
+  .status-card > div { min-width: 0; overflow-wrap: anywhere; }
+  footer { line-height: 1.9; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  footer a { display: inline-block; padding-block: 10px; }
+  .startup { padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom)); }
+  .startup-panel h1 { font-size: 24px; }
+}
+
+</style>
+<section id="startup" class="startup" role="dialog" aria-modal="true" aria-labelledby="startup-title" tabindex="-1">
+<div class="startup-panel"><span class="startup-brand">Verto Arabic ASR</span><h1 id="startup-title">تجهيز نموذج التفريغ</h1><p>يبدأ التحميل تلقائيًا. حوالي 70 MB في المرة الأولى، ثم نستخدم النسخة المحفوظة على جهازك عند توفرها.</p><div class="startup-state" role="status" aria-live="polite"><strong id="startup-stage">جاري التحقق من الموديل المحفوظ…</strong><span id="startup-detail">الصوت يظل على جهازك.</span></div><progress id="startup-progress" max="100" aria-label="تقدم تحميل الموديل"></progress><span id="startup-size" class="startup-size"></span><button id="startup-retry" class="primary" type="button" hidden>إعادة المحاولة</button></div>
+</section>
+<main inert>
+<header><a class="brand" href="/">Verto Arabic ASR</a><span class="badge">Preview</span><button id="language" class="subtle" type="button">English</button></header>
+<div class="intro"><h1>تفريغ الكلام المصري والعربي والإنجليزي داخل المتصفح</h1><p>المعالجة على جهازك. لا يتم رفع الصوت إلى خادم.</p></div>
+<section class="examples" aria-labelledby="examples-title"><div class="examples-heading"><h2 id="examples-title">أمثلة صوتية</h2><span id="examples-note">معاينة محلية · حقوق توزيع التسجيلات غير محسومة</span></div><div id="example-list" class="example-grid"></div></section>
+<section class="workspace">
+<div class="input-side">
+<div class="section-label"><h2>الصوت</h2><span class="clip-limit">0.5–30 ثانية</span></div>
+<button id="record" class="record-button"><span class="mic-icon" aria-hidden="true">●</span><strong id="record-label">تسجيل</strong><span id="record-hint">حتى 30 ثانية</span></button>
+<div id="recording-panel" hidden><span class="record-dot"></span><span id="timer">00:00</span><meter id="level" min="0" max="1" value="0" aria-label="مستوى صوت الميكروفون"></meter></div>
+<div class="divider"><span>أو</span></div>
+<label class="upload" for="audio"><strong>رفع ملف</strong><span>OGG / Opus · WAV · MP3 · M4A · FLAC · WebM · PCM</span><input id="audio" type="file" aria-label="رفع ملف صوت" accept="audio/*,video/*,.wav,.wave,.mp3,.m4a,.aac,.ogg,.oga,.opus,.webm,.flac,.pcm,.raw,.aif,.aiff,.amr,.3gp,.mp4,.mkv,.wma,.caf,.m4b"></label>
+<div id="pcm-options" class="selected" hidden><strong>إعدادات PCM الخام</strong><p style="font-size:12px">الملف الخام مفيهوش معلومات عن الصوت. اختار نفس إعدادات مصدره؛ الاختيار الغلط بيغير الصوت والمدة.</p><label>معدل العينة <select id="pcm-rate"><option value="">اختار</option><option>8000</option><option>16000</option><option>22050</option><option>24000</option><option>44100</option><option>48000</option><option>96000</option></select></label><label>القنوات <select id="pcm-channels"><option value="1">Mono</option><option value="2">Stereo</option></select></label><label>نوع العينات <select id="pcm-format"><option value="s16le">Signed 16-bit LE</option><option value="s24le">Signed 24-bit LE</option><option value="s32le">Signed 32-bit LE</option><option value="f32le">Float 32-bit LE</option><option value="u8">Unsigned 8-bit</option></select></label></div>
+<div id="selected" class="selected" hidden><strong id="filename"></strong><span id="duration"></span><audio id="preview" controls></audio></div>
+<button id="run" class="primary" disabled>تفريغ</button>
+</div>
+<div class="output-side"><div class="section-label"><h2>النص</h2><button id="copy" class="subtle" disabled>نسخ</button></div>
+<textarea id="text" dir="rtl" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="يظهر النص هنا بعد التفريغ. يمكنك تعديله ونسخه."></textarea>
+<div id="result-summary" class="result-summary">اختر مثالًا أو سجّل صوتًا أو ارفع ملفًا.</div></div>
+</section>
+<section class="status-card" aria-live="polite"><span id="status-icon" aria-hidden="true">○</span><div><strong id="status" role="status">جاهز</strong><span id="status-detail">تنزيل الموديل عند أول تفريغ: حوالي 70 MB.</span></div><progress id="progress" aria-label="تقدم تحميل الموديل" max="100" hidden></progress></section>
+<p id="storage-note" class="storage-note" hidden>تعذر حفظ الموديل. يعمل في هذه الجلسة، وقد تحتاج لتنزيله عند فتح الصفحة مجددًا.</p>
+<details class="settings"><summary>إعدادات التشغيل والتفاصيل التقنية</summary><div class="settings-row"><label>محرك التشغيل <select id="mode"><option value="wasm">CPU — الافتراضي</option><option value="webgpu">تجربة WebGPU مع رجوع تلقائي إلى CPU</option></select></label><button id="load" class="subtle">إعادة تحميل الموديل</button><label><input id="benchmark" type="checkbox"> قياس الأداء: إحماء + 5 محاولات</label></div><button id="clear-cache" class="subtle" type="button">مسح الموديل المحفوظ</button><pre id="device"></pre><pre id="metrics"></pre></details>
+<footer>Verto Arabic ASR · Preview · INT8 · مقاطع من 0.5 إلى 30 ثانية<br>التسجيل والتحويل محليان. الدقة قد تختلف حسب وضوح الصوت واللهجة.<br><a href="https://github.com/yayaiu6/Verto-Arabic-ASR">GitHub</a> · <a href="https://huggingface.co/yayaiu6/Verto-Arabic-ASR">Model</a> · <a href="/assets/licenses/NOTICES.md">Licenses</a></footer>
+</main><script type="module">
+import {readAudio,audioError,recordMicrophone,encodeWav} from '/assets/app/audio.mjs?v=0d37e40b274a962a1348';
+import {validateSamples} from '/assets/app/core.mjs?v=0d37e40b274a962a1348';
+import {initLanguage} from '/assets/app/i18n.mjs?v=0d37e40b274a962a1348';
+import {createExampleLoader,assertExamplesPublishable} from '/assets/app/examples.mjs?v=0d37e40b274a962a1348';
+function formatTranscript(text){
+ return text.replace(/(^|[^\p{L}\p{M}\p{N}_])ال(?=[ \t]+[A-Za-z])/gu,'$1الـ');
+}
+
+const $=id=>document.getElementById(id);
+let worker;
+let booting=true;
+let ready=false,loadedMode=null,working=false,samples=null,recorder=null,tick=null,previewUrl=null,loadTask=null;
+const loadExample=createExampleLoader();
+const exampleUrls=[];
+
+function status(title,detail='',error=false){$('status').textContent=title;$('status-detail').textContent=detail;$('status-icon').textContent=error?'!':working?'◌':'✓';$('status').closest('section').classList.toggle('error',error);if(booting){$('startup-stage').textContent=title;$('startup-detail').textContent=detail;}}
+function controls(){
+  const locked=booting||working||!!recorder;
+  $('run').disabled=locked||(!samples&&!$('audio').files[0]);$('load').disabled=locked;$('mode').disabled=locked;
+  $('audio').disabled=locked;$('record').disabled=booting||working;
+  document.querySelectorAll('.example-actions button').forEach(b=>b.disabled=locked);
+}
+function finishError(error){working=false;$('progress').hidden=true;status('تعذر إكمال العملية',audioError(error),true);controls();}
+function clearResult(){
+  $('text').value='';$('copy').disabled=true;$('metrics').textContent='';
+  $('result-summary').textContent='النص هيظهر هنا بعد تفريغ الصوت الجديد.';
+}
+function attachWorker(){worker=new Worker(new URL('/assets/app/worker.mjs?v=0d37e40b274a962a1348',import.meta.url),{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
+function setAudio(pcm,name){
+  validateSamples(pcm);samples=pcm;
+  $('selected').hidden=false;$('filename').textContent=name;$('duration').textContent=`${(pcm.length/16000).toFixed(1)} ثانية`;
+  if(previewUrl)URL.revokeObjectURL(previewUrl);
+  previewUrl=URL.createObjectURL(new Blob([encodeWav(pcm)],{type:'audio/wav'}));$('preview').src=previewUrl;
+  status('الصوت جاهز','اضغط «تفريغ» لعرض النص.');controls();
+}
+async function ensureModel(force=false){
+  if(ready && loadedMode===$('mode').value && !force)return;
+  if(loadTask)return loadTask.promise;
+  ready=false;status('جاري تحميل الموديل…','تنزيل الموديل: حوالي 70 MB. لا يتم رفع الصوت.');
+  $('progress').hidden=false;$('progress').removeAttribute('value');
+  let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});loadTask={promise,resolve,reject};
+  if(!worker)attachWorker();worker.postMessage({type:'load',mode:$('mode').value});return promise;
+}
+function handleMessage({data}){
+  if(data.type==='progress'){
+    const loaded=data.bundleLoaded??data.loaded,total=data.bundleTotal??data.total;
+    if(booting&&total){$('startup-progress').value=100*loaded/total;$('startup-size').textContent=`${(loaded/1e6).toFixed(1)} / ${(total/1e6).toFixed(1)} MB · ${Math.floor(100*loaded/total)}%`;}
+    if(data.phase==='storage-unavailable')$('storage-note').hidden=false;
+    if(data.phase==='initializing'&&booting){$('startup-progress').removeAttribute('value');$('startup-size').textContent='';}
+    const states={checking:'جاري التحقق من الموديل المحفوظ…',initializing:'جاري تهيئة محرك التفريغ…',verifying:'جاري التحقق من ملفات الموديل…',cached:'تم تحميل الموديل من جهازك',saved:'الموديل محفوظ على جهازك','storage-unavailable':'تعذر حفظ الموديل؛ هنكمل في الذاكرة'};
+    if(states[data.phase]){status(states[data.phase],'قد يعيد المتصفح التنزيل إذا تم مسح بيانات الموقع.');return;}
+    if(total){$('progress').value=100*loaded/total;status('جاري تنزيل الموديل…',`${(loaded/1e6).toFixed(1)} / ${(total/1e6).toFixed(1)} MB`);if(booting)$('startup-detail').textContent='اترك الصفحة مفتوحة حتى يكتمل التنزيل.';}
+    else status('جاري تجهيز الموديل…','بنجهز محرك التشغيل على جهازك.');return;
+  }
+  if(data.type==='ready'){
+    ready=true;loadedMode=$('mode').value;$('progress').hidden=true;$('device').textContent=JSON.stringify(data,null,2);
+    status('الموديل جاهز',data.provider==='wasm'?'التشغيل على CPU.':'WebGPU جاهز؛ بعض العمليات قد تستخدم CPU.');
+    const pending=loadTask;loadTask=null;pending?.resolve(data);return;
+  }
+  if(data.type==='fallback'){status('التشغيل على CPU','تعذر مسار GPU؛ بنكمل على المعالج.');$('device').textContent=JSON.stringify(data,null,2);return;}
+  if(data.type==='result'){
+    $('text').value=formatTranscript(data.text);$('copy').disabled=!data.text;
+    const {ids,text,type,...metrics}=data;$('metrics').textContent=JSON.stringify({...metrics,outputTokens:ids.length},null,2);
+    $('result-summary').textContent=`${data.duration.toFixed(1)} ثانية صوت · ${((data.featureMs+data.medianMs)/1000).toFixed(2)} ثانية معالجة · ${data.provider==='wasm'?'CPU':'WebGPU / CPU'}`;
+    working=false;$('progress').hidden=true;
+    if(matchMedia('(max-width: 720px)').matches){
+      document.querySelector('.output-side').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+    }
+    status(data.text?'انتهى التفريغ':'لم نلتقط كلامًا واضحًا',data.text?'يمكنك تعديل النص ونسخه.':'جرّب تتكلم أقرب للميكروفون، أو اختار مثال جاهز.');controls();return;
+  }
+  if(data.type==='error'){
+    const pending=loadTask;loadTask=null;
+    if(pending){ready=false;pending.reject(new Error(data.error));}else finishError(new Error(data.error));
+  }
+  if(data.type==='cache-cleared'){working=false;ready=false;status('تم مسح ملفات الموديل المحفوظة');controls();}
+};
+function handleWorkerError(event){
+  event.preventDefault();ready=false;worker?.terminate();worker=null;
+  const pending=loadTask;loadTask=null;const error=new Error('تعذر تشغيل محرك الصوت. جرّب المثال مرة تانية، أو أعد تحميل الصفحة لو المشكلة مستمرة.');
+  pending?.reject(error);if(!pending)finishError(error);
+}
+
+async function transcribe(){
+  if(working||recorder)return;working=true;clearResult();controls();
+  document.querySelectorAll('audio').forEach(audio=>audio.pause());
+  try {
+    if(!samples){const file=$('audio').files[0];if(!file)throw new Error('اختر ملف صوت أو سجّل مقطعًا أولًا.');
+      status('جاري قراءة الصوت…','فك الصوت وتجهيزه على الجهاز.');
+      setAudio(await readAudio(file,{pcm:{sampleRate:Number($('pcm-rate').value),channels:Number($('pcm-channels').value),format:$('pcm-format').value},onStatus:message=>status('جاري تجهيز الصوت…',message)}),file.name);}
+    await ensureModel();status('جاري تفريغ الصوت…','استخراج الكلام من التسجيل على جهازك.');$('progress').hidden=false;$('progress').removeAttribute('value');
+    worker.postMessage({type:'transcribe',samples:samples.slice(),repeats:$('benchmark').checked?5:1});
+  }catch(e){finishError(e);}
+}
+$('run').onclick=transcribe;
+$('load').onclick=async()=>{working=true;controls();try{await ensureModel(true);working=false;controls();}catch(e){finishError(e);}};
+$('audio').onchange=()=>{
+  document.querySelectorAll('audio').forEach(audio=>audio.pause());
+  samples=null;$('selected').hidden=true;clearResult();
+  const file=$('audio').files[0];status(file?'تم اختيار الملف':'جاهز',file?`${file.name} — اضغط «تفريغ» لفك الملف وتجربته.`:'اختار ملف صوت أو جرّب مثال جاهز.');controls();
+  $('pcm-options').hidden=!/\.(pcm|raw)$/i.test(file?.name||'');
+};
+async function initExamples(){
+ try{
+  const response=await fetch('/assets/examples.json',{cache:'no-store'});if(!response.ok)throw new Error('Example manifest unavailable');
+  const manifest=await response.json();
+  if(manifest.previewOnly && !['localhost','127.0.0.1','[::1]'].includes(location.hostname))throw new Error('Local preview only');
+  if(!manifest.previewOnly)assertExamplesPublishable(manifest);
+  $('examples-note').hidden=!manifest.previewOnly;
+  for(const entry of manifest.examples){
+   const card=document.createElement('article');card.className='example-card';card.dataset.example=entry.id;
+   const meta=document.createElement('div');meta.className='example-meta';
+   const name=document.createElement('strong');name.textContent=entry.label;
+   const duration=document.createElement('span');duration.textContent=`${entry.duration.toFixed(1)} ثانية`;meta.append(name,duration);
+   const actions=document.createElement('div');actions.className='example-actions';
+   const listen=document.createElement('button');listen.type='button';listen.className='subtle';listen.textContent='استماع';
+   const run=document.createElement('button');run.type='button';run.className='sample';run.textContent='جرّب المثال';run.dataset.sample=entry.id;
+   const player=document.createElement('audio');player.controls=true;player.preload='none';player.hidden=true;player.className='example-player';player.setAttribute('aria-label',entry.label);
+   actions.append(listen,run);card.append(meta,actions,player);$('example-list').append(card);
+   const choose=async(transcribeNow)=>{
+    if(working||recorder)return;
+    working=true;controls();status('جاري تحميل المثال…');
+    try{
+     const pcm=await loadExample(entry);
+     document.querySelectorAll('audio').forEach(audio=>audio.pause());
+     if(transcribeNow){
+      document.querySelectorAll('.example-card').forEach(node=>node.classList.toggle('selected-example',node===card));
+      $('audio').value='';$('pcm-options').hidden=true;setAudio(pcm,entry.label);working=false;await transcribe();
+     }else{
+      if(!player.src){const url=URL.createObjectURL(new Blob([encodeWav(pcm)],{type:'audio/wav'}));exampleUrls.push(url);player.src=url;}
+      player.hidden=false;await player.play();working=false;status('الصوت جاهز','اضغط «جرّب المثال» لتفريغ التسجيل.');controls();
+     }
+    }catch(error){finishError(new Error('تعذر تحميل المثال أو تشغيله. اضغط مجددًا لإعادة المحاولة.'));}
+   };
+   listen.onclick=()=>choose(false);run.onclick=()=>choose(true);
+  }
+  controls();
+ }catch{ $('example-list').textContent='تعذر تحميل الأمثلة. أعد تحميل الصفحة أو استخدم التسجيل ورفع الملفات.'; }
+}
+async function stopRecording(){
+  if(!recorder)return;
+  const active=recorder;recorder=null;clearInterval(tick);tick=null;working=true;controls();
+  $('record').classList.remove('recording');$('record-label').textContent='تسجيل';$('record-hint').textContent='حتى 30 ثانية';$('recording-panel').hidden=true;
+  try{setAudio(await active.stop(),'تسجيل الميكروفون');working=false;await transcribe();}catch(e){finishError(e);}
+}
+$('record').onclick=async()=>{
+  if(recorder){await stopRecording();return;}
+  if(working)return;
+  document.querySelectorAll('audio').forEach(audio=>audio.pause());
+  working=true;controls();status('اسمح باستخدام الميكروفون','لو ظهرت رسالة من المتصفح، اضغط Allow / سماح.');
+  try{
+    recorder=await recordMicrophone(level=>{$('level').value=level;});working=false;$('audio').value='';samples=null;clearResult();$('selected').hidden=true;
+    $('record').classList.add('recording');$('record-label').textContent='إيقاف وتفريغ التسجيل';$('record-hint').textContent='اضغط لإيقاف التسجيل';$('recording-panel').hidden=false;$('timer').textContent='00:00';
+    const start=performance.now();tick=setInterval(()=>{const sec=Math.floor((performance.now()-start)/1000);$('timer').textContent=`00:${String(Math.min(30,sec)).padStart(2,'0')}`;if(sec>=30)stopRecording();},100);
+    status('جاري التسجيل…','اضغط إيقاف عند انتهاء التسجيل.');controls();
+  }catch(e){finishError(e);}
+};
+$('text').oninput=()=>{$('copy').disabled=!$('text').value;};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('text').value);$('copy').textContent='تم النسخ';setTimeout(()=>{$('copy').textContent='نسخ';},1600);}catch{$('text').select();status('تم تحديد النص','اضغط Ctrl+C لنسخه.');}};
+window.addEventListener('pagehide',()=>{if(recorder)recorder.stop().catch(()=>{});if(tick)clearInterval(tick);exampleUrls.forEach(url=>URL.revokeObjectURL(url));});
+$('clear-cache').onclick=()=>{if(working||recorder)return;working=true;controls();worker?.postMessage({type:'clear-cache'});if(!worker){attachWorker();worker.postMessage({type:'clear-cache'});}};
+if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+navigator.storage?.persist?.().catch(()=>{});
+attachWorker();controls();initLanguage();
+initExamples();
+async function startModel(){
+ if(loadTask)return;
+ booting=true;working=true;document.querySelector('main').inert=true;$('startup').hidden=false;$('startup-retry').hidden=true;$('startup-progress').hidden=false;$('startup-progress').removeAttribute('value');$('startup-size').textContent='';$('startup').focus();controls();
+ document.body.classList.add('model-loading');
+ try{
+  await ensureModel();booting=false;working=false;$('startup').hidden=true;document.querySelector('main').inert=false;document.body.classList.remove('model-loading');controls();$('record').focus({preventScroll:true});
+ }catch(error){
+  working=false;$('startup-stage').textContent='تعذر تجهيز الموديل';$('startup-detail').textContent=audioError(error);$('startup-progress').hidden=true;$('startup-size').textContent='';$('startup-retry').hidden=false;$('startup-retry').focus();
+ }
+}
+$('startup-retry').onclick=startModel;
+startModel();
+
+</script></html>

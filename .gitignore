@@ -1,11 +1,11 @@
-node_modules/
-dist/
-test-results/
 .env
 .env.*
-!.env.example
 *.onnx
 *.pt
 *.safetensors
 *.py
 .venv/
+node_modules/
+dist/
+dist-preview/
+test-results/

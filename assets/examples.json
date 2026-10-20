@@ -1,0 +1,56 @@
+{
+  "previewOnly": false,
+  "examples": [
+    {
+      "id": "ar_1",
+      "label": "مصري",
+      "language": "ar-EG",
+      "duration": 18.565,
+      "path": "/examples/ar_1.pcm.f32",
+      "bytes": 1188160,
+      "sha256": "49ae21b28bf987e4d410317f27108675da86641f6344f080ae4767ae80f08ade",
+      "source": "https://huggingface.co/spaces/mohammedaly22/metro-asr/blob/525644dc782b6627f1eb1f0a589407fcacbfc152/gradio_examples/ar_1.wav",
+      "publication": {
+        "approved": true,
+        "evidence": "https://huggingface.co/spaces/mohammedaly22/metro-asr/blob/525644dc782b6627f1eb1f0a589407fcacbfc152/gradio_examples/ar_1.wav",
+        "basis": "Publication explicitly authorized by the project owner on 2026-10-21.",
+        "independentRecordingLicenseVerified": false
+      },
+      "sourceSha256": "3829d0605beb62a7bf266487f1b8dc8bdcb56dbcac11c1ffd6d4b56790d7b8fb"
+    },
+    {
+      "id": "cs_1",
+      "label": "عربي + English",
+      "language": "ar-EG/en",
+      "duration": 5.307,
+      "path": "/examples/cs_1.pcm.f32",
+      "bytes": 339648,
+      "sha256": "f7f1b683b50e620259666d312853a3e0fabf1f8a6c227a3dfea74c88fb072731",
+      "source": "https://huggingface.co/spaces/mohammedaly22/metro-asr/blob/525644dc782b6627f1eb1f0a589407fcacbfc152/gradio_examples/cs_1.wav",
+      "publication": {
+        "approved": true,
+        "evidence": "https://huggingface.co/spaces/mohammedaly22/metro-asr/blob/525644dc782b6627f1eb1f0a589407fcacbfc152/gradio_examples/cs_1.wav",
+        "basis": "Publication explicitly authorized by the project owner on 2026-10-21.",
+        "independentRecordingLicenseVerified": false
+      },
+      "sourceSha256": "2c338fd847ee33767791068e5130f8f72f9a99c491a5265bb439ca8bf331debe"
+    },
+    {
+      "id": "En_3",
+      "label": "إنجليزي",
+      "language": "en",
+      "duration": 5.56,
+      "path": "/examples/En_3.pcm.f32",
+      "bytes": 355840,
+      "sha256": "083a74a558bf5abbc899fef9e91afd9fd38e03ca369c74b98c176e6496a0d52b",
+      "source": "https://huggingface.co/spaces/mohammedaly22/metro-asr/blob/525644dc782b6627f1eb1f0a589407fcacbfc152/gradio_examples/En_3.flac",
+      "publication": {
+        "approved": true,
+        "evidence": "https://huggingface.co/spaces/mohammedaly22/metro-asr/blob/525644dc782b6627f1eb1f0a589407fcacbfc152/gradio_examples/En_3.flac",
+        "basis": "Publication explicitly authorized by the project owner on 2026-10-21.",
+        "independentRecordingLicenseVerified": false
+      },
+      "sourceSha256": "6521d55d3303f486f51e59c30fecfb32d8ad325372fbe6e5078742326d74e988"
+    }
+  ]
+}

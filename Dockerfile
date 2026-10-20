@@ -1,19 +1,8 @@
-FROM node:22-alpine AS build
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
-COPY web ./web
-COPY public ./public
-COPY scripts/build.mjs ./scripts/build.mjs
-COPY scripts/dependency-sources.mjs ./scripts/dependency-sources.mjs
-COPY LICENSE THIRD_PARTY_NOTICES.md ./
-COPY licenses ./licenses
-RUN npm run build
-
 FROM nginx:1.28-alpine
-COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
-COPY deploy /opt/verto
-RUN chmod +x /opt/verto/start.sh
+COPY --chown=nginx:nginx index.html LICENSE /usr/share/nginx/html/
+COPY --chown=nginx:nginx assets /usr/share/nginx/html/assets
+COPY assets/server/start.sh assets/server/nginx.conf.template /opt/verto/
+RUN chmod +x /opt/verto/start.sh && test ! -e /usr/bin/node && test ! -e /usr/bin/npm
 USER nginx
 ENV PORT=8080
 EXPOSE 8080

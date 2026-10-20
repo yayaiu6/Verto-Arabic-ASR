@@ -1,0 +1,321 @@
+{
+  "version": "0d37e40b274a962a1348",
+  "dependencies": {
+    "onnxruntime-web": "1.23.2",
+    "@ffmpeg/ffmpeg": "0.12.15",
+    "@ffmpeg/core": "0.12.10",
+    "IBM Plex Sans Arabic": "Regular (OFL-1.1)"
+  },
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 34681,
+      "sha256": "09205dbe1a843e4c087b97f70c98153ded867375b559aa9c13e27591981bf046"
+    },
+    {
+      "path": "assets/app/audio.mjs",
+      "bytes": 8438,
+      "sha256": "aa4c94f62d53af2b3b69f7101950971b9ef07d21f3a952c45aaae5f4f2e83cfc"
+    },
+    {
+      "path": "assets/app/capture-worklet.mjs",
+      "bytes": 384,
+      "sha256": "b14ac6da02d5061b2797930ae775aee8354bdd0ce2049ee8bd4434d42f64bd91"
+    },
+    {
+      "path": "assets/app/convert-audio.mjs",
+      "bytes": 1914,
+      "sha256": "e5de6bbfeeea6a0c5057f8e77f10daadff232cc12fbe381d3dd34d1b9ffd0bf2"
+    },
+    {
+      "path": "assets/app/core.mjs",
+      "bytes": 2799,
+      "sha256": "82a3a68db58bc94fe16bd72c359868b13a95ca609e555c1da9412c4b25bc09d7"
+    },
+    {
+      "path": "assets/app/developer.html",
+      "bytes": 1408,
+      "sha256": "6629c824572bb3ba65ce2ae5db8b59bdd1a1f2e61314aa2f24cae2c81b7a2728"
+    },
+    {
+      "path": "assets/app/examples.mjs",
+      "bytes": 1612,
+      "sha256": "ac43f8c1b1994f27c2456aa848369f1c6c70de77e65fd8e5abae5a77f7263fb2"
+    },
+    {
+      "path": "assets/app/i18n.mjs",
+      "bytes": 16573,
+      "sha256": "21612080efbae99a4595c8b104746d9b0f81e6bfd6bf357555cdb6adc8838203"
+    },
+    {
+      "path": "assets/app/model-cache.mjs",
+      "bytes": 4055,
+      "sha256": "ddb0a22c8a79b157fd1739cb400d7dc4296936e3f28cafdba66534247a8f4ec8"
+    },
+    {
+      "path": "assets/app/verto.mjs",
+      "bytes": 2159,
+      "sha256": "069acb65ca464a982b62829238c33fc544da398988512bfa9e5998a4481453d5"
+    },
+    {
+      "path": "assets/app/worker.mjs",
+      "bytes": 4217,
+      "sha256": "79f1155d9cd753323ed8f5c8c52e657ec8fd32ca926e1a562bd92709ec1fb7de"
+    },
+    {
+      "path": "assets/config.json",
+      "bytes": 117,
+      "sha256": "d28ea3308bc8cb343bcd429419a96b68e3254d871ba6cf0e630dd61ed8e046de"
+    },
+    {
+      "path": "assets/examples/ar_1.pcm.f32",
+      "bytes": 1188160,
+      "sha256": "49ae21b28bf987e4d410317f27108675da86641f6344f080ae4767ae80f08ade"
+    },
+    {
+      "path": "assets/examples/cs_1.pcm.f32",
+      "bytes": 339648,
+      "sha256": "f7f1b683b50e620259666d312853a3e0fabf1f8a6c227a3dfea74c88fb072731"
+    },
+    {
+      "path": "assets/examples/En_3.pcm.f32",
+      "bytes": 355840,
+      "sha256": "083a74a558bf5abbc899fef9e91afd9fd38e03ca369c74b98c176e6496a0d52b"
+    },
+    {
+      "path": "assets/examples.json",
+      "bytes": 2589,
+      "sha256": "3664a62edac2ff3f92b0f1994c2c9956b31573b27979307e26dad5ebe77aa090"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.10/core/ffmpeg-core.js",
+      "bytes": 111804,
+      "sha256": "67a48f11645f85439f3fde4f2119042c16b374b910206b7a7a24f342e28dcae3"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.10/core/ffmpeg-core.wasm",
+      "bytes": 32232419,
+      "sha256": "9f57947a5bd530d8f00c5b3f2cb2a3492faa7e5d823315342d6a8656d0a6b7b7"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.15/wrapper/classes.js",
+      "bytes": 9747,
+      "sha256": "7a829c898bdbc3a8806652a5502d9101178ce4e988a2c50b3abc1306ce4fc919"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.15/wrapper/const.js",
+      "bytes": 1016,
+      "sha256": "9e3bc9dd84781c81daf459e2c46eeec815edac35089832681d9a9a0f383060d0"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.15/wrapper/empty.d.mts",
+      "bytes": 51,
+      "sha256": "c01e3642ad0641ccdd73bac48fb7fdff3f86197ef0c8f8a97ed033d5d9a41234"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.15/wrapper/empty.mjs",
+      "bytes": 157,
+      "sha256": "92f665ead7579ff7cd0f08d63e2eb6b27bce16be06991b2aa93510ba07741dbf"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.15/wrapper/errors.js",
+      "bytes": 332,
+      "sha256": "619310d7ef5fe5fefa0a31927db862b7c291713cfef4d71753fa8aafd18f4db6"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.15/wrapper/index.js",
+      "bytes": 58,
+      "sha256": "cad19572420f7ead17272082d9582ebaed7f2856e19875542f83daf8d25d3b5d"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.15/wrapper/types.js",
+      "bytes": 295,
+      "sha256": "72f80e6fd44fcd18b55c9a0deb3bc70b9bb37480cf969045ca4521f5a11300f5"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.15/wrapper/utils.js",
+      "bytes": 138,
+      "sha256": "8c2e0e16445f8d3a0acbb812f2c60541a92c88ed0bf9ffe96c52e7fb6c8b1d72"
+    },
+    {
+      "path": "assets/ffmpeg/0.12.15/wrapper/worker.js",
+      "bytes": 5085,
+      "sha256": "feff0ac937ea225e997e1fae997a74f8b8d572423a526da59eb56624b1f3cde7"
+    },
+    {
+      "path": "assets/fonts/IBMPlexSansArabic-Regular.ttf",
+      "bytes": 235924,
+      "sha256": "6f611412270a132bbac838da9259d4c68569b4175f3b3b8fa3fa36a30b56dab9"
+    },
+    {
+      "path": "assets/licenses/FFMPEG-GPL.txt",
+      "bytes": 17984,
+      "sha256": "edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6"
+    },
+    {
+      "path": "assets/licenses/FFMPEG-SOURCE.md",
+      "bytes": 1888,
+      "sha256": "a5a38c4dad73051231da058c501a4c3fd2f1d352e43771ef8808faceb02ff33e"
+    },
+    {
+      "path": "assets/licenses/ffmpeg-source.tar.gz",
+      "bytes": 1115881,
+      "sha256": "0b1f8c757793a8bbc513a408f56cad2236934dc1e1bfbbe90826ab9a5af0df0a"
+    },
+    {
+      "path": "assets/licenses/FFMPEG-WRAPPER-MIT.txt",
+      "bytes": 1066,
+      "sha256": "3e123e29517d76504ffce77b3f8e2ccffd4712493f27694b0aba3e376676459f"
+    },
+    {
+      "path": "assets/licenses/IBM-PLEX-OFL.txt",
+      "bytes": 4456,
+      "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da"
+    },
+    {
+      "path": "assets/licenses/METRO-MIT.txt",
+      "bytes": 1069,
+      "sha256": "638a6f1f1dd93f16ddc2afe6299a13b49cf7ea047885e10f4d7b39c334c8be50"
+    },
+    {
+      "path": "assets/licenses/NOTICES.md",
+      "bytes": 1984,
+      "sha256": "124dd40e93de5d80ce510116dc17e1399ac8fb75869c62d5ce4436f928ae0fc1"
+    },
+    {
+      "path": "assets/licenses/ONNXRUNTIME-MIT.txt",
+      "bytes": 1073,
+      "sha256": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c"
+    },
+    {
+      "path": "assets/licenses/ONNXRUNTIME-THIRD-PARTY.txt",
+      "bytes": 326866,
+      "sha256": "e9e90971a8e75a9a8ac0c6412e29c1202d079998389915aa485f46c816c3b4cc"
+    },
+    {
+      "path": "assets/licenses/sources/FFmpeg-FFmpeg.tar.gz",
+      "bytes": 14419343,
+      "sha256": "6ed8ba17d513955cd9a03d0d87195b8eac3d148dcb61ef30ebddf1a3cd718de8"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-freetype2.tar.gz",
+      "bytes": 2093212,
+      "sha256": "b1708021058e573847bcf626f81eac02e4fe47a093a98260c1c73c6492b14db0"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-lame.tar.gz",
+      "bytes": 1524603,
+      "sha256": "462522855b5406ee9e083a23a105ff8342fc0648a07fd9d0c50545c337ff6634"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-libvpx.tar.gz",
+      "bytes": 5515662,
+      "sha256": "00dae80465567272abd077f59355f95ac91d7809a2d3006f9ace2637dd429d14"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-libwebp.tar.gz",
+      "bytes": 3685345,
+      "sha256": "c2c2f521fa468e3c5949ab698c2da410f5dce1c5e99f5ad9e70e0e8446b86505"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-Ogg.tar.gz",
+      "bytes": 255906,
+      "sha256": "17e130f823c497ae6be169838389b502a2e8789bad208bb6e39db4618f1f4ece"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-opus.tar.gz",
+      "bytes": 828897,
+      "sha256": "4834a8944c33a7ecab5cad9454eeabe4680ca1842cb8f5a2437572dbf636de8f"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-theora.tar.gz",
+      "bytes": 1132902,
+      "sha256": "1d5c3b25bbced448f3e741c42df6796e3d5e57136a74bcd68262318290ec2982"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-vorbis.tar.gz",
+      "bytes": 1324249,
+      "sha256": "3dbb847196087dfabc54f24930191ff50f19868f34458c0f5d6f9789eeb675ff"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-x264.tar.gz",
+      "bytes": 941411,
+      "sha256": "cc64a8972d47d835c9f7626b735bf270b81c9a8197c250e75dfe0dfdc7835b10"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-x265.tar.gz",
+      "bytes": 1530201,
+      "sha256": "abd37f4ab99570fcf2272c47239653204b0854ea5ef19df3729112aaa1f6f311"
+    },
+    {
+      "path": "assets/licenses/sources/ffmpegwasm-zlib.tar.gz",
+      "bytes": 644492,
+      "sha256": "629380c90a77b964d896ed37163f5c3a34f6e6d897311f1df2a7016355c45eff"
+    },
+    {
+      "path": "assets/licenses/sources/fribidi-fribidi.tar.gz",
+      "bytes": 2088184,
+      "sha256": "ef6f940d04213a0fb91a0177b2b57df2031bf3a7e2cd0ee2c6877a160fc206df"
+    },
+    {
+      "path": "assets/licenses/sources/harfbuzz-harfbuzz.tar.gz",
+      "bytes": 32956027,
+      "sha256": "a9fd9869efeec4cd6ab34527ed1e82df65be39cbfdb750d02dfa66148eac4c04"
+    },
+    {
+      "path": "assets/licenses/sources/libass-libass.tar.gz",
+      "bytes": 243154,
+      "sha256": "232b1339c633e6a93c153cac7a483e536944921605f35fcbaedc661c62fb49ec"
+    },
+    {
+      "path": "assets/licenses/sources/sekrit-twc-zimg.tar.gz",
+      "bytes": 326694,
+      "sha256": "a9a0226bf85e0d83c41a8ebe4e3e690e1348682f6a2a7838f1b8cbff1b799bcf"
+    },
+    {
+      "path": "assets/precache.json",
+      "bytes": 619,
+      "sha256": "cb2d002f0373f56630985d8e32ecd43e0e504012358e36e316eabef028fd5a76"
+    },
+    {
+      "path": "assets/runtime/1.23.2/ort-wasm-simd-threaded.asyncify.mjs",
+      "bytes": 51913,
+      "sha256": "249b4dc791f081d33bd11760bfd669fe85f97289e679bbeb291b874272125dff"
+    },
+    {
+      "path": "assets/runtime/1.23.2/ort-wasm-simd-threaded.asyncify.wasm",
+      "bytes": 25499390,
+      "sha256": "babec0bbddb6d3082623b99b7e1391b75e0729bcca076ff8424d7753af97fada"
+    },
+    {
+      "path": "assets/runtime/1.23.2/ort-wasm-simd-threaded.jsep.mjs",
+      "bytes": 49998,
+      "sha256": "c7b70c8003f077c62849e15275d0b1f1d1cf1a6dfc63b967400567c7224bfdbe"
+    },
+    {
+      "path": "assets/runtime/1.23.2/ort-wasm-simd-threaded.jsep.wasm",
+      "bytes": 23824254,
+      "sha256": "ac0d8f1cfbf2732420ad78a86072b8507253c63885a61c3fd640b3055256d31d"
+    },
+    {
+      "path": "assets/runtime/1.23.2/ort.webgpu.min.mjs",
+      "bytes": 66261,
+      "sha256": "8ae8f1340dd86f8aaa5acc0fd5ec2f42ae874ffd7c9cd804281b73fd177c9864"
+    },
+    {
+      "path": "assets/server/nginx.conf.template",
+      "bytes": 1880,
+      "sha256": "de03e0813a4d4cc069c1eb697f1123ee877001d247161f0c879b311ab2afab26"
+    },
+    {
+      "path": "assets/server/start.sh",
+      "bytes": 1103,
+      "sha256": "79e5187897fd407e9da6ab75a62e08c40abac6ccbb17a62ba80e1b2e40ef7b40"
+    },
+    {
+      "path": "assets/sw.js",
+      "bytes": 1602,
+      "sha256": "81a26c28ad8725797fd3e64049d92060aadc600d5a36c65e7e045b489ad3d740"
+    }
+  ]
+}
