@@ -2,9 +2,24 @@
 
 Browser transcription for Egyptian Arabic and mixed Arabic–English audio. Record or upload a 0.5–60 second clip. Processing stays on your device.
 
-**Preview.** Accuracy has not been evaluated against human-reviewed references. WebGPU is optional and may use mixed CPU placement. CPU/WASM is the default.
+**Preview.** Evaluated against Casablanca reference transcripts; results and limits are summarized below. WebGPU is optional and may use mixed CPU placement. CPU/WASM is the default.
 
 [Model files](https://huggingface.co/yayaiu6/Verto-Arabic-ASR) · [Source](https://github.com/yayaiu6/Verto-Arabic-ASR)
+
+## Benchmark
+
+Compared with the original Metro FP32 checkpoint on **6,726 Casablanca recordings (7.70 hours)**, using the Open Universal Arabic ASR Leaderboard's evaluator and greedy CTC without KenLM. Lower error rates are better.
+
+| Metric | Original FP32 | Verto INT8 |
+|---|---:|---:|
+| WER — all eight dialects | 75.408% | 75.449% |
+| CER — all eight dialects | 41.847% | 41.875% |
+| WER — Egyptian Arabic (825 recordings) | 30.678% | 31.115% |
+| Inference file size | 238.84 MB | 69.46 MB |
+
+The file is **70.92% smaller**, with WER increases of **0.041 percentage points overall** and **0.437 on Egyptian Arabic**. Both versions have high error rates on several other dialects. These results do not establish equal accuracy on other audio; speed, memory and browser performance were not benchmarked.
+
+[Full benchmark and methodology](BENCHMARK.md) · [Results CSV](benchmark-results.csv)
 
 ## Deploy
 
