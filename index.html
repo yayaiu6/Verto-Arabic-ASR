@@ -743,10 +743,10 @@ body.model-loading { overflow: hidden; }
 <details class="settings"><summary>إعدادات التشغيل والتفاصيل التقنية</summary><div class="settings-row"><label>محرك التشغيل <select id="mode"><option value="wasm">CPU — الافتراضي</option><option value="webgpu">تجربة WebGPU مع رجوع تلقائي إلى CPU</option></select></label><button id="load" class="subtle">إعادة تحميل الموديل</button><label><input id="benchmark" type="checkbox"> قياس الأداء: إحماء + 5 محاولات</label></div><button id="clear-cache" class="subtle" type="button">مسح الموديل المحفوظ</button><pre id="device"></pre><pre id="metrics"></pre></details>
 <footer>Verto Arabic ASR · Preview · INT8 · مقاطع من 0.5 إلى 60 ثانية<br>التسجيل والتحويل محليان. الدقة قد تختلف حسب وضوح الصوت واللهجة.<br><a href="https://github.com/yayaiu6/Verto-Arabic-ASR">GitHub</a> · <a href="https://huggingface.co/yayaiu6/Verto-Arabic-ASR">Model</a> · <a href="/assets/licenses/NOTICES.md">Licenses</a></footer>
 </main><script type="module">
-import {readAudio,audioError,recordMicrophone,encodeWav} from '/assets/app/audio.mjs?v=734c17f1e6c065dee2c9';
-import {validateSamples} from '/assets/app/core.mjs?v=734c17f1e6c065dee2c9';
-import {initLanguage} from '/assets/app/i18n.mjs?v=734c17f1e6c065dee2c9';
-import {createExampleLoader,assertExamplesPublishable} from '/assets/app/examples.mjs?v=734c17f1e6c065dee2c9';
+import {readAudio,audioError,recordMicrophone,encodeWav} from '/assets/app/audio.mjs?v=28ef369de2067dd52966';
+import {validateSamples} from '/assets/app/core.mjs?v=28ef369de2067dd52966';
+import {initLanguage} from '/assets/app/i18n.mjs?v=28ef369de2067dd52966';
+import {createExampleLoader,assertExamplesPublishable} from '/assets/app/examples.mjs?v=28ef369de2067dd52966';
 function formatTranscript(text){
  return text.replace(/(^|[^\p{L}\p{M}\p{N}_])ال(?=[ \t]+[A-Za-z])/gu,'$1الـ');
 }
@@ -771,7 +771,7 @@ function clearResult(){
   $('text').value='';$('copy').disabled=true;$('metrics').textContent='';
   $('result-summary').textContent='النص هيظهر هنا بعد تفريغ الصوت الجديد.';
 }
-function attachWorker(){worker=new Worker(new URL('/assets/app/worker.mjs?v=734c17f1e6c065dee2c9',import.meta.url),{type:'module'});worker.onmessage=handleMessage;worker.onerror=handleWorkerError;}
+function attachWorker(){const current=worker=new Worker(new URL('/assets/app/worker.mjs?v=28ef369de2067dd52966',import.meta.url),{type:'module'});current.onmessage=event=>{if(worker===current)handleMessage(event);};current.onerror=event=>{if(worker===current)handleWorkerError(event);};}
 function setAudio(pcm,name){
   recordingInfo=null;
   validateSamples(pcm);samples=pcm;
@@ -790,6 +790,7 @@ async function ensureModel(force=false){
 }
 function handleMessage({data}){
   if(data.type==='progress'){
+    if(data.phase==='runtime-checking'||data.phase==='runtime-recovering'){status(data.phase==='runtime-recovering'?'جاري إعادة تحميل ملفات التشغيل…':'جاري التحقق من ملفات التشغيل…','ملفات التشغيل منفصلة عن أوزان الموديل المحفوظة.');return;}
     const loaded=data.bundleLoaded??data.loaded,total=data.bundleTotal??data.total;
     if(booting&&total){$('startup-progress').value=100*loaded/total;$('startup-size').textContent=`${(loaded/1e6).toFixed(1)} / ${(total/1e6).toFixed(1)} MB · ${Math.floor(100*loaded/total)}%`;}
     if(data.phase==='storage-unavailable')$('storage-note').hidden=false;
@@ -817,7 +818,7 @@ function handleMessage({data}){
   }
   if(data.type==='error'){
     const pending=loadTask;loadTask=null;
-    if(pending){ready=false;pending.reject(new Error(data.error));}else finishError(new Error(data.error));
+    if(pending){ready=false;worker?.terminate();worker=null;const messages={'runtime-invalid':'تعذر تحميل ملفات التشغيل بشكل سليم. تحقق من الاتصال ثم حاول مجددًا.','runtime-network':'تعذر تنزيل ملفات التشغيل. تحقق من الاتصال ثم حاول مجددًا.'};pending.reject(new Error(messages[data.code]||data.error));}else finishError(new Error(data.error));
   }
   if(data.type==='cache-cleared'){working=false;ready=false;status('تم مسح ملفات الموديل المحفوظة');controls();}
 };

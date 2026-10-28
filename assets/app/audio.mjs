@@ -86,7 +86,7 @@ export async function readAudio(file,{pcm,onStatus=()=>{}}={}) {
   try{const context=new OfflineAudioContext(1,1,16000);decoded=await context.decodeAudioData(bytes.slice(0));}
   catch{
     onStatus('المتصفح مش بيفك الصيغة دي مباشرة. بنجهز التحويل المحلي…');
-    const {convertAudio}=await import('./convert-audio.mjs?v=734c17f1e6c065dee2c9');
+    const {convertAudio}=await import('./convert-audio.mjs?v=28ef369de2067dd52966');
     return convertAudio(bytes,onStatus);
   }
   if(decoded.duration<.5 || decoded.duration>60) throw new Error('مدة الصوت يجب أن تكون من 0.5 إلى 60 ثانية');
@@ -102,7 +102,7 @@ export async function recordMicrophone(onLevel) {
   let context;
   try {
     // Capture at the device's preferred rate; resample once after recording.
-    context=new AudioContext({latencyHint:'playback'});await context.audioWorklet.addModule('/assets/app/capture-worklet.mjs?v=734c17f1e6c065dee2c9');
+    context=new AudioContext({latencyHint:'playback'});await context.audioWorklet.addModule('/assets/app/capture-worklet.mjs?v=28ef369de2067dd52966');
     const chunks=[],source=context.createMediaStreamSource(stream),node=new AudioWorkletNode(context,'pcm-capture');
     let stopped=false,interrupted=false,captureError=null,finishCapture=null,chunkCount=0,diagnostics=null;
     node.port.onmessage=({data})=>{

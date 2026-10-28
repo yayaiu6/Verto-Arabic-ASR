@@ -1,6 +1,7 @@
-import {loadModelFiles,clearModels} from './model-cache.mjs?v=734c17f1e6c065dee2c9';
+import {loadModelFiles,clearModels} from './model-cache.mjs?v=28ef369de2067dd52966';
 import * as ort from '/assets/runtime/1.23.2/ort.webgpu.min.mjs';
-import { validateSamples,logMel,ctcIds,decodePieces } from './core.mjs?v=734c17f1e6c065dee2c9';
+import {loadRuntimeBinary,runtimeFiles} from './runtime-loader.mjs?v=28ef369de2067dd52966';
+import { validateSamples,logMel,ctcIds,decodePieces } from './core.mjs?v=28ef369de2067dd52966';
 
 ort.env.wasm.wasmPaths='/assets/runtime/1.23.2/';
 ort.env.wasm.numThreads=self.crossOriginIsolated ? Math.min(4,navigator.hardwareConcurrency || 1) : 1;
@@ -20,6 +21,11 @@ async function load(mode, modelConfig) {
   filters=JSON.parse(new TextDecoder().decode(bundle.files['mel_filters.json']));
   pieces=JSON.parse(new TextDecoder().decode(bundle.files['tokenizer.json'])).pieces;
   post('progress',{phase:'initializing'});
+  // This pinned ORT build imports the asyncify glue on every supported browser.
+  if(!ort.env.wasm.wasmBinary){
+    const path='/assets/runtime/1.23.2/ort-wasm-simd-threaded.asyncify.wasm';
+    ort.env.wasm.wasmBinary=await loadRuntimeBinary({path,...runtimeFiles[path]},event=>post('progress',event));
+  }
   if(mode==='webgpu') {
     try {
       if(!navigator.gpu || !await navigator.gpu.requestAdapter()) throw new Error('WebGPU adapter unavailable');
@@ -76,6 +82,6 @@ self.onmessage=async ({data})=>{
     else if(data.type==='clear-cache'){await clearModels();post('cache-cleared');}
     else if(data.type==='transcribe') post('result',{id:data.id,...await infer(data.samples,data.repeats)});
     else throw new Error('Unknown worker operation');
-  } catch(error) { post('error',{id:data.id,error:String(error?.message || error)}); }
+  } catch(error) { post('error',{id:data.id,error:String(error?.message || error),code:error.code,details:error.details}); }
   finally { busy=false; }
 };

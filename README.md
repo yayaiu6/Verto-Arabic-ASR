@@ -64,6 +64,8 @@ try {
 
 Tests and preparation tools are maintained outside this public application package. Runtime updates must replace the matching JS/WASM files together, retain notices and refresh the application version, asset manifest and precache list. Do not edit vendored binaries. The container serves the files directly.
 
+WASM runtime downloads are checked against pinned sizes, binary headers and SHA-256 values before inference. A failed download gets one fresh, cache-bypassing attempt. Retry after initialization failure creates a new Worker without clearing model weights. Update the pinned inventory in `assets/app/runtime-integrity.js` deliberately when changing runtime dependencies; private tests verify it against the shipped files and selected glue module.
+
 ## Storage and limits
 
 The model is 69,461,736 bytes; the complete inference assets are 69,934,740 bytes. The model downloads automatically on entry, is checked against its size and SHA-256, and is cached when storage permits. Browsers or users may clear stored data. Playback/decoding libraries load as needed; source archives are not precached.
